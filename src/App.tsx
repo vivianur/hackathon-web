@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import { Box } from '@mui/material';
 import Navbar from './components/Navbar';
+import CognitiveAlerts from './components/CognitiveAlerts';
 import Home from './pages/Home';
 import Painel from './pages/Painel';
 import Tarefas from './pages/Tarefas';
@@ -12,6 +13,7 @@ function App() {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar />
+      <CognitiveAlerts />
       <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default' }}>
         <Routes>
           <Route path="/" element={<Home />} />
