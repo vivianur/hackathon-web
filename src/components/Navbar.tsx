@@ -1,7 +1,8 @@
-import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Box, useTheme, useMediaQuery } from '@mui/material';
-import { Menu as MenuIcon, Home, Dashboard, Assignment, Person, Settings, Explore } from '@mui/icons-material';
+import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Box, useTheme, useMediaQuery, Tooltip } from '@mui/material';
+import { Menu as MenuIcon, Home, Dashboard, Assignment, Person, Settings, Explore, Brightness4, Brightness7 } from '@mui/icons-material';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useThemeStore } from '../store/themeStore';
 
 const menuItems = [
   { title: 'Home', path: '/', icon: <Home /> },
@@ -17,6 +18,7 @@ export default function Navbar() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
+  const { mode, toggleTheme } = useThemeStore();
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
@@ -65,7 +67,7 @@ export default function Navbar() {
             Hackathon FIAP
           </Typography>
           {!isMobile && (
-            <Box sx={{ display: 'flex', gap: 1 }}>
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
               {menuItems.map((item) => (
                 <Button
                   key={item.path}
@@ -80,7 +82,19 @@ export default function Navbar() {
                   {item.title}
                 </Button>
               ))}
+              <Tooltip title={mode === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}>
+                <IconButton onClick={toggleTheme} color="inherit" sx={{ ml: 1 }}>
+                  {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
+                </IconButton>
+              </Tooltip>
             </Box>
+          )}
+          {isMobile && (
+            <Tooltip title={mode === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}>
+              <IconButton onClick={toggleTheme} color="inherit">
+                {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
+              </IconButton>
+            </Tooltip>
           )}
         </Toolbar>
       </AppBar>
