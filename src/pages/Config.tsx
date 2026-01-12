@@ -1,83 +1,166 @@
-import { Container, Typography, Box, Paper, Switch, FormControlLabel, Divider, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import { useState } from 'react';
+import { Container, Typography, Box, Switch, FormControlLabel, Divider, Button, Alert } from '@mui/material';
+import { RestartAlt, Notifications, VolumeUp, EmojiEvents, WarningAmber } from '@mui/icons-material';
+import AccessibleContainer from '../components/AccessibleContainer';
+import FocusCard from '../components/FocusCard';
+import { useProfileStore } from '../store/profileStore';
+import { useAccessibilityStore } from '../store/accessibilityStore';
 
 export default function Config() {
-  const [notificacoes, setNotificacoes] = useState(true);
-  const [modoEscuro, setModoEscuro] = useState(false);
-  const [idioma, setIdioma] = useState('pt-BR');
+  const { profile, updatePreferences } = useProfileStore();
+  const { resetToDefaults } = useAccessibilityStore();
+
+  if (!profile) {
+    return (
+      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+        <Alert severity="info">
+          Carregando configurações...
+        </Alert>
+      </Container>
+    );
+  }
+
+  const preferences = profile.preferences;
+
+  const handleReset = () => {
+    if (window.confirm('Tem certeza que deseja restaurar todas as configurações para os valores padrão?')) {
+      resetToDefaults();
+      updatePreferences({
+        notifications: true,
+        soundEffects: true,
+        encouragementMessages: true,
+        transitionWarnings: true,
+      });
+    }
+  };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Configurações
-      </Typography>
-      <Typography variant="body1" color="text.secondary" paragraph>
-        Personalize sua experiência no sistema.
-      </Typography>
-
-      <Paper sx={{ p: 3, mt: 3 }}>
-        <Typography variant="h6" gutterBottom>
-          Preferências Gerais
+    <AccessibleContainer>
+      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+        <Typography variant="h3" component="h1" gutterBottom>
+          Configurações
         </Typography>
-        <Box sx={{ mt: 2 }}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={notificacoes}
-                onChange={(e) => setNotificacoes(e.target.checked)}
-              />
-            }
-            label="Ativar notificações"
-          />
-        </Box>
-        <Box sx={{ mt: 2 }}>
-          <FormControlLabel
-            control={
-              <Switch
-                checked={modoEscuro}
-                onChange={(e) => setModoEscuro(e.target.checked)}
-              />
-            }
-            label="Modo escuro"
-          />
-        </Box>
-
-        <Divider sx={{ my: 3 }} />
-
-        <Typography variant="h6" gutterBottom>
-          Idioma e Região
+        <Typography variant="h6" color="text.secondary" paragraph>
+          Ajuste preferências de notificações e comportamento do sistema
         </Typography>
-        <FormControl fullWidth sx={{ mt: 2 }}>
-          <InputLabel>Idioma</InputLabel>
-          <Select
-            value={idioma}
-            label="Idioma"
-            onChange={(e) => setIdioma(e.target.value)}
+
+        <Alert severity="warning" sx={{ mb: 3 }}>
+          As configurações de acessibilidade estão disponíveis no Painel Cognitivo
+        </Alert>
+
+        <FocusCard title="Notificações" icon={<Notifications color="primary" />} defaultExpanded>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.notifications}
+                  onChange={(e) => updatePreferences({ notifications: e.target.checked })}
+                  color="primary"
+                />
+              }
+              label={
+                <Box>
+                  <Typography>Ativar notificações</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Receba alertas sobre tarefas e timers
+                  </Typography>
+                </Box>
+              }
+            />
+          </Box>
+        </FocusCard>
+
+        <FocusCard title="Sons e Efeitos" icon={<VolumeUp color="primary" />}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.soundEffects}
+                  onChange={(e) => updatePreferences({ soundEffects: e.target.checked })}
+                  color="primary"
+                />
+              }
+              label={
+                <Box>
+                  <Typography>Efeitos sonoros</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Sons ao completar tarefas e finalizar timers
+                  </Typography>
+                </Box>
+              }
+            />
+          </Box>
+        </FocusCard>
+
+        <FocusCard title="Apoio Cognitivo" icon={<EmojiEvents color="primary" />}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.encouragementMessages}
+                  onChange={(e) => updatePreferences({ encouragementMessages: e.target.checked })}
+                  color="primary"
+                />
+              }
+              label={
+                <Box>
+                  <Typography>Mensagens de incentivo</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Receba feedback positivo ao concluir atividades
+                  </Typography>
+                </Box>
+              }
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={preferences.transitionWarnings}
+                  onChange={(e) => updatePreferences({ transitionWarnings: e.target.checked })}
+                  color="primary"
+                />
+              }
+              label={
+                <Box>
+                  <Typography>Avisos de transição</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Notificações suaves antes de mudanças de atividade
+                  </Typography>
+                </Box>
+              }
+            />
+          </Box>
+        </FocusCard>
+
+        <Divider sx={{ my: 4 }} />
+
+        <FocusCard title="Restaurar Padrões" icon={<WarningAmber color="warning" />}>
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            Esta ação irá restaurar todas as configurações de acessibilidade e preferências
+            para os valores padrão.
+          </Alert>
+          <Button
+            variant="outlined"
+            color="warning"
+            startIcon={<RestartAlt />}
+            onClick={handleReset}
+            fullWidth
           >
-            <MenuItem value="pt-BR">Português (Brasil)</MenuItem>
-            <MenuItem value="en-US">English (US)</MenuItem>
-            <MenuItem value="es-ES">Español</MenuItem>
-          </Select>
-        </FormControl>
+            Restaurar Configurações Padrão
+          </Button>
+        </FocusCard>
 
-        <Divider sx={{ my: 3 }} />
-
-        <Typography variant="h6" gutterBottom>
-          Privacidade
-        </Typography>
-        <Box sx={{ mt: 2 }}>
-          <FormControlLabel
-            control={<Switch defaultChecked />}
-            label="Permitir cookies analíticos"
-          />
+        <Box sx={{ mt: 4 }}>
+          <Alert severity="info">
+            <Typography variant="body2" fontWeight="medium" gutterBottom>
+              💡 Dica: Configurações Salvas Automaticamente
+            </Typography>
+            <Typography variant="body2">
+              Todas as suas configurações são salvas automaticamente no seu navegador.
+              Suas preferências persistem mesmo após fechar e reabrir a aplicação.
+            </Typography>
+          </Alert>
         </Box>
-        <Box sx={{ mt: 2 }}>
-          <FormControlLabel
-            control={<Switch defaultChecked />}
-            label="Compartilhar dados de uso"
-          />
-        </Box>
-      </Paper>
-    </Container>
+      </Container>
+    </AccessibleContainer>
   );
 }
+
