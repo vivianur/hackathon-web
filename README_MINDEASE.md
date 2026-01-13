@@ -144,7 +144,7 @@ cd hackathon-web
 npm install
 
 # Execute o projeto
-npm run dev
+npm run dev:legacy
 ```
 
 O projeto estará disponível em `http://localhost:5173`
@@ -152,10 +152,10 @@ O projeto estará disponível em `http://localhost:5173`
 ### Scripts Disponíveis
 
 ```bash
-npm run dev      # Inicia servidor de desenvolvimento
-npm run build    # Build para produção
-npm run preview  # Preview do build de produção
-npm run lint     # Executa o linter
+npm run dev:legacy    # Inicia servidor de desenvolvimento (principal)
+npm run build:legacy  # Build para produção
+npm run preview:legacy # Preview do build de produção
+npm run lint          # Executa o linter
 ```
 
 ## ♿ Acessibilidade Cognitiva
@@ -224,14 +224,14 @@ Os componentes UI precisarão ser reescritos com React Native, mas a estrutura e
 
 ## 📱 Próximos Passos
 
+- [ ] Completar migração para arquitetura Microfrontend
 - [ ] Implementar testes unitários
-- [ ] Adicionar testes E2E com Cypress
 - [ ] CI/CD com GitHub Actions
-- [ ] PWA support
-- [ ] Backend com Node.js/Express
+- [ ] Integração VLibras
 - [ ] Versão React Native
-- [ ] Integração com APIs externas
 - [ ] Sistema de gamificação
+
+> Veja o [Roadmap completo](./docs/roadmap.md) para mais detalhes
 
 ## 👥 Equipe
 
