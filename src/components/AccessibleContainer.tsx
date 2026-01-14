@@ -62,7 +62,7 @@ export default function AccessibleContainer({ children, sx, disableFocusBlur = f
       sx={{
         fontSize: `${getFontSizeMultiplier()}rem`,
         '& > *': {
-          marginBottom: `${getSpacingMultiplier()}rem`,
+          paddingBottom: `${getSpacingMultiplier()}rem`,
         },
         ...getContrastStyles(),
         ...(focusMode && !disableFocusBlur ? {

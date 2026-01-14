@@ -5,10 +5,12 @@ import { useState, useEffect } from 'react';
 import AccessibleContainer from '../components/AccessibleContainer';
 import FocusCard from '../components/FocusCard';
 import { useProfileStore } from '../store/profileStore';
+import { useAnimations } from '../hooks/useAnimations';
 
 export default function Perfil() {
   const { profile, setProfile, updateProfile, updateStudyRoutine, addNeurodivergence, removeNeurodivergence } = useProfileStore();
   const [isEditing, setIsEditing] = useState(false);
+  const animations = useAnimations();
 
   useEffect(() => {
     // Criar perfil inicial se não existir
@@ -53,16 +55,28 @@ export default function Perfil() {
   return (
     <AccessibleContainer>
       <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom>
+        <Typography variant="h3" component="h1" gutterBottom sx={animations.fadeIn}>
           Perfil do Usuário
         </Typography>
         <Typography variant="h6" color="text.secondary" paragraph>
           Gerencie suas informações e preferências pessoais
         </Typography>
 
-        <Paper sx={{ p: 4, mt: 3, mb: 3 }}>
+        <Paper sx={{ p: 4, mt: 3, mb: 3, ...animations.slideUp }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4 }}>
-            <Avatar sx={{ width: 100, height: 100, mb: 2, bgcolor: 'primary.main' }}>
+            <Avatar sx={{ 
+              width: 100, 
+              height: 100, 
+              mb: 2, 
+              bgcolor: 'primary.main',
+              ...(animations.level === 'detailed' && {
+                animation: 'pulse 2s ease-in-out infinite',
+                '@keyframes pulse': {
+                  '0%, 100%': { transform: 'scale(1)' },
+                  '50%': { transform: 'scale(1.05)' },
+                },
+              }),
+            }}>
               <Person sx={{ fontSize: 60 }} />
             </Avatar>
             <Typography variant="h5">{profile.name}</Typography>

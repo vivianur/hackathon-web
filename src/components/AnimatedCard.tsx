@@ -1,7 +1,7 @@
 import { Card, CardContent, Fade, Grow, Slide } from '@mui/material';
 import type { CardProps } from '@mui/material';
 import type { ReactNode } from 'react';
-import { useAccessibilityStore } from '../store/accessibilityStore';
+import { useAnimations } from '../hooks/useAnimations';
 
 interface AnimatedCardProps extends Omit<CardProps, 'children'> {
   children: ReactNode;
@@ -15,7 +15,7 @@ export default function AnimatedCard({
   delay = 0,
   ...cardProps 
 }: AnimatedCardProps) {
-  const { animationsEnabled } = useAccessibilityStore();
+  const { shouldAnimate } = useAnimations();
 
   const cardContent = (
     <Card {...cardProps}>
@@ -23,7 +23,7 @@ export default function AnimatedCard({
     </Card>
   );
 
-  if (!animationsEnabled) {
+  if (!shouldAnimate) {
     return cardContent;
   }
 

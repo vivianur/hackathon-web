@@ -4,6 +4,7 @@ import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { useAccessibilityStore } from '../store/accessibilityStore';
 import { useThemeStore } from '../store/themeStore';
+import { useAnimations } from '../hooks/useAnimations';
 
 interface FocusCardProps {
   title: string;
@@ -23,6 +24,7 @@ export default function FocusCard({
   const [expanded, setExpanded] = useState(defaultExpanded);
   const { complexityLevel, detailedMode } = useAccessibilityStore();
   const mode = useThemeStore((state) => state.mode);
+  const animations = useAnimations();
 
   // Em modo simples, sempre expandido
   const isExpanded = complexityLevel === 'simple' || detailedMode ? true : expanded;
@@ -32,11 +34,9 @@ export default function FocusCard({
       variant={variant}
       sx={{ 
         mb: 1,
-        transition: 'all 0.3s ease',
         backgroundColor: mode === 'dark' ? '#050505' : undefined,
-        '&:hover': {
-          boxShadow: 3,
-        }
+        ...animations.slideUp,
+        ...animations.cardHover,
       }}
     >
       <CardContent sx={{ cursor: complexityLevel !== 'simple' && !detailedMode ? 'pointer' : 'default' }} onClick={() => complexityLevel !== 'simple' && !detailedMode && setExpanded(!expanded)}>

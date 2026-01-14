@@ -1,14 +1,16 @@
 import { Container, Typography, Box, Switch, FormControlLabel, Divider, Button, Alert } from '@mui/material';
 import ThemedAlert from '../components/ThemedAlert';
-import { RestartAlt, Notifications, VolumeUp, EmojiEvents, WarningAmber } from '@mui/icons-material';
+import { RestartAlt, Notifications, VolumeUp, EmojiEvents, Undo } from '@mui/icons-material';
 import AccessibleContainer from '../components/AccessibleContainer';
 import FocusCard from '../components/FocusCard';
 import { useProfileStore } from '../store/profileStore';
 import { useAccessibilityStore } from '../store/accessibilityStore';
+import { useAnimations } from '../hooks/useAnimations';
 
 export default function Config() {
   const { profile, updatePreferences } = useProfileStore();
   const { resetToDefaults } = useAccessibilityStore();
+  const animations = useAnimations();
 
   if (!profile) {
     return (
@@ -37,7 +39,7 @@ export default function Config() {
   return (
     <AccessibleContainer>
       <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom>
+        <Typography variant="h3" component="h1" gutterBottom sx={animations.fadeIn}>
           Configurações
         </Typography>
         <Typography variant="h6" color="text.secondary" paragraph>
@@ -133,14 +135,14 @@ export default function Config() {
 
         <Divider sx={{ my: 4 }} />
 
-        <FocusCard title="Restaurar Padrões" icon={<WarningAmber color="warning" />}>
-          <ThemedAlert severity="warning" sx={{ mb: 2 }}>
+        <FocusCard title="Restaurar Padrões" icon={<Undo color="primary" />}>
+          <ThemedAlert severity="warning" sx={{ mb: 2, pl: 1 }}>
             Esta ação irá restaurar todas as configurações de acessibilidade e preferências
             para os valores padrão.
           </ThemedAlert>
           <Button
             variant="outlined"
-            color="warning"
+            color="primary"
             startIcon={<RestartAlt />}
             onClick={handleReset}
             fullWidth
