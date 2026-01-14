@@ -1,4 +1,5 @@
-import { Container, Typography, Box, Paper, Avatar, TextField, Button, Grid, Chip, FormControl, InputLabel, Select, MenuItem, Alert } from '@mui/material';
+import { Container, Typography, Box, Paper, Avatar, TextField, Button, Grid, Chip, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
+import ThemedAlert from '../components/ThemedAlert';
 import { Person, Psychology, AccessTime, LocalCafe } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import AccessibleContainer from '../components/AccessibleContainer';
@@ -51,7 +52,7 @@ export default function Perfil() {
 
   return (
     <AccessibleContainer>
-      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
         <Typography variant="h3" component="h1" gutterBottom>
           Perfil do Usuário
         </Typography>
@@ -114,9 +115,9 @@ export default function Perfil() {
         </Paper>
 
         <FocusCard title="Neurodivergências" icon={<Psychology color="primary" />} defaultExpanded>
-          <Alert severity="info" sx={{ mb: 2 }}>
+          <ThemedAlert severity="info" sx={{ mb: 3, pl: 1 }}>
             Identifique suas necessidades para que possamos personalizar melhor sua experiência.
-          </Alert>
+          </ThemedAlert>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
             {neurodivergenceOptions.map((option) => {
               const isSelected = profile.neurodivergence?.includes(option);
@@ -217,7 +218,7 @@ export default function Perfil() {
           </Grid>
         </FocusCard>
 
-        <Paper sx={{ p: 3, mt: 3, bgcolor: 'success.main', color: 'white' }}>
+        <Paper sx={{ p: 3, mt: 3, bgcolor: 'primary.main', color: 'white' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <LocalCafe sx={{ fontSize: 40 }} />
             <Box>
