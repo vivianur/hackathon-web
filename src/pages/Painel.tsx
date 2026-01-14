@@ -5,10 +5,12 @@ import AccessibleContainer from '../components/AccessibleContainer';
 import FocusCard from '../components/FocusCard';
 import { useAccessibilityStore } from '../store/accessibilityStore';
 import { useThemeStore } from '../store/themeStore';
+import { useAnimations } from '../hooks/useAnimations';
 
 export default function Painel() {
   const accessibility = useAccessibilityStore();
   const { mode, toggleTheme } = useThemeStore();
+  const animations = useAnimations();
 
   const complexityOptions = [
     { value: 'simple', label: 'Simples', description: 'Interface minimalista' },
@@ -32,7 +34,7 @@ export default function Painel() {
   return (
     <AccessibleContainer>
       <Container maxWidth="lg" sx={{ pt: 4, pb: 4 }}>
-        <Box sx={{ mb: 4 }}>
+        <Box sx={{ mb: 4, ...animations.fadeIn }}>
           <Typography variant="h3" component="h1" gutterBottom>
             Painel Cognitivo
           </Typography>
@@ -46,7 +48,7 @@ export default function Painel() {
 
         <Grid container spacing={0}>
           {/* Nível de Complexidade */}
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }} sx={animations.staggerDelay(0)}>
             <FocusCard title="Nível de Complexidade" icon={<TextFields color="primary" />} defaultExpanded>
               <FormControl fullWidth sx={{ mt: 2 }}>
                 <InputLabel>Complexidade da Interface</InputLabel>
@@ -78,7 +80,7 @@ export default function Painel() {
           </Grid>
 
           {/* Modos de Visualização */}
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }} sx={animations.staggerDelay(1)}>
             <FocusCard title="Modos de Visualização" icon={<Visibility color="primary" />} defaultExpanded>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
                 <FormControlLabel
@@ -137,7 +139,7 @@ export default function Painel() {
           </Grid>
 
           {/* Tamanho da Fonte */}
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }} sx={animations.staggerDelay(2)}>
             <FocusCard title="Tamanho da Fonte" icon={<TextFields color="primary" />}>
               <FormControl fullWidth sx={{ mt: 2 }}>
                 <InputLabel>Tamanho</InputLabel>
@@ -160,7 +162,7 @@ export default function Painel() {
           </Grid>
 
           {/* Espaçamento */}
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }} sx={animations.staggerDelay(3)}>
             <FocusCard title="Espaçamento" icon={<SpaceBar color="primary" />}>
               <FormControl fullWidth sx={{ mt: 2 }}>
                 <InputLabel>Espaçamento</InputLabel>
@@ -183,7 +185,7 @@ export default function Painel() {
           </Grid>
 
           {/* Contraste */}
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }} sx={animations.staggerDelay(4)}>
             <FocusCard title="Contraste" icon={<Contrast color="primary" />}>
               <FormControl fullWidth sx={{ mt: 2 }}>
                 <InputLabel>Nível de Contraste</InputLabel>
@@ -203,7 +205,7 @@ export default function Painel() {
           </Grid>
 
           {/* Recursos Adicionais */}
-          <Grid size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }} sx={animations.staggerDelay(5)}>
             <FocusCard title="Recursos Adicionais" icon={<Accessible color="primary" />}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
                 <FormControlLabel
