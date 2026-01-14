@@ -40,7 +40,7 @@ export default function Home() {
 
   return (
     <AccessibleContainer disableFocusBlur>
-      <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="lg" sx={{ pt: 4, pb: 4 }}>
         <Box sx={{ mb: 6, textAlign: 'center' }}>
           <Psychology sx={{ fontSize: 80, color: 'primary.main', mb: 2 }} />
           <Typography variant="h2" component="h1" gutterBottom fontWeight="bold">

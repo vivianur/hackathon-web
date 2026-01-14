@@ -1,4 +1,5 @@
 import { Container, Typography, Box, Switch, FormControlLabel, Divider, Button, Alert } from '@mui/material';
+import ThemedAlert from '../components/ThemedAlert';
 import { RestartAlt, Notifications, VolumeUp, EmojiEvents, WarningAmber } from '@mui/icons-material';
 import AccessibleContainer from '../components/AccessibleContainer';
 import FocusCard from '../components/FocusCard';
@@ -11,7 +12,7 @@ export default function Config() {
 
   if (!profile) {
     return (
-      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
         <Alert severity="info">
           Carregando configurações...
         </Alert>
@@ -35,7 +36,7 @@ export default function Config() {
 
   return (
     <AccessibleContainer>
-      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
         <Typography variant="h3" component="h1" gutterBottom>
           Configurações
         </Typography>
@@ -43,9 +44,9 @@ export default function Config() {
           Ajuste preferências de notificações e comportamento do sistema
         </Typography>
 
-        <Alert severity="warning" sx={{ mb: 3 }}>
+        <ThemedAlert severity="warning" sx={{ mb: 3 }}>
           As configurações de acessibilidade estão disponíveis no Painel Cognitivo
-        </Alert>
+        </ThemedAlert>
 
         <FocusCard title="Notificações" icon={<Notifications color="primary" />} defaultExpanded>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
@@ -133,10 +134,10 @@ export default function Config() {
         <Divider sx={{ my: 4 }} />
 
         <FocusCard title="Restaurar Padrões" icon={<WarningAmber color="warning" />}>
-          <Alert severity="warning" sx={{ mb: 2 }}>
+          <ThemedAlert severity="warning" sx={{ mb: 2 }}>
             Esta ação irá restaurar todas as configurações de acessibilidade e preferências
             para os valores padrão.
-          </Alert>
+          </ThemedAlert>
           <Button
             variant="outlined"
             color="warning"
@@ -149,15 +150,15 @@ export default function Config() {
         </FocusCard>
 
         <Box sx={{ mt: 4 }}>
-          <Alert severity="info">
+          <ThemedAlert severity="info">
             <Typography variant="body2" fontWeight="medium" gutterBottom>
-              💡 Dica: Configurações Salvas Automaticamente
+              Dica: Configurações Salvas Automaticamente
             </Typography>
             <Typography variant="body2">
               Todas as suas configurações são salvas automaticamente no seu navegador.
               Suas preferências persistem mesmo após fechar e reabrir a aplicação.
             </Typography>
-          </Alert>
+          </ThemedAlert>
         </Box>
       </Container>
     </AccessibleContainer>

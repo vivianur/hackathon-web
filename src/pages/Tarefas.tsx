@@ -24,7 +24,7 @@ export default function Tarefas() {
 
   return (
     <AccessibleContainer>
-      <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="xl" sx={{ pt: 4, pb: 4 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
           <Box>
             <Typography variant="h3" component="h1" gutterBottom>
