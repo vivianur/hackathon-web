@@ -1,56 +1,117 @@
-# MindEase - Plataforma de Acessibilidade Cognitiva 🧠
+# MindEase - Plataforma de Acessibilidade Cognitiva
 
-> Facilitando a vida acadêmica e profissional de pessoas neurodivergentes através de tecnologia inclusiva
+> Facilitando a vida academica e profissional de pessoas neurodivergentes atraves de tecnologia inclusiva
 
-## 📋 Sobre
+## Sobre
 
-**MindEase** é uma plataforma desenvolvida para o Hackathon FIAP 2026 com foco em **acessibilidade cognitiva**, auxiliando pessoas com TDAH, TEA, Dislexia, Burnout e outras condições.
+**MindEase** e uma plataforma desenvolvida para o Hackathon FIAP 2026 com foco em **acessibilidade cognitiva**, auxiliando pessoas com TDAH, TEA, Dislexia, Burnout e outras condicoes.
 
-## 🚀 Quick Start
+## Quick Start
+
+### Docker (Recomendado)
 
 ```bash
-# Instalar dependências
+# Iniciar stack completa
+npm run docker:local:up
+
+# Acessar: http://localhost:3000
+
+# Parar
+npm run docker:local:down
+```
+
+### Desenvolvimento Local
+
+```bash
+# Instalar dependencias
 npm install
 
-# Executar aplicação
-npm run dev:legacy
+# Executar todos os microfrontends
+npm run dev
 
-# Acesse: http://localhost:5173
+# Acessar: http://localhost:5000 (shell)
 ```
 
-## 📖 Documentação Completa
+## Arquitetura
 
-- **[README_MINDEASE.md](./README_MINDEASE.md)** - Documentação detalhada do projeto
-- **[docs/roadmap.md](./docs/roadmap.md)** - Roadmap e status de implementação
-- **[docs/entrega.md](./docs/entrega.md)** - Briefing do Hackathon
+Este projeto utiliza **Module Federation** com arquitetura de microfrontends:
 
-## 🛠️ Stack
+```
+                    +------------------+
+                    |      SHELL       |  <- Host (porta 3000)
+                    |  (React Router)  |
+                    +--------+---------+
+                             |
+        +--------------------+--------------------+
+        |                    |                    |
++-------v-------+    +-------v-------+    +-------v-------+
+|   DASHBOARD   |    |     TASKS     |    |    PROFILE    |
+|  (Painel,     |    |   (Tarefas)   |    | (Perfil,      |
+|   Explore)    |    |               |    |  Config)      |
++---------------+    +---------------+    +---------------+
+    porta 5001          porta 5002          porta 5003
+```
+
+### Estrutura do Monorepo
+
+```
+hackathon-web/
+├── apps/
+│   ├── shell/          # Host - Routing e layout
+│   ├── dashboard/      # Remote - Painel e Explore
+│   ├── tasks/          # Remote - Tarefas (Kanban)
+│   └── profile/        # Remote - Perfil e Config
+├── packages/
+│   └── shared/         # Codigo compartilhado (stores, components, domain)
+└── docker/             # Configuracao Docker e Nginx
+```
+
+## Comandos
+
+| Comando | Descricao |
+|---------|-----------|
+| `npm run docker:local:up` | Inicia stack Docker completa |
+| `npm run docker:local:down` | Para containers Docker |
+| `npm run dev` | Inicia todos os MFs localmente |
+| `npm run dev:shell` | Apenas shell (porta 5000) |
+| `npm run build` | Build de todos os workspaces |
+| `npm run lint` | Executa ESLint |
+
+## Stack Tecnologica
 
 - **React 19** + **TypeScript** + **Vite**
+- **Module Federation** - `@originjs/vite-plugin-federation`
 - **Material UI v7** - Design System
-- **Zustand** - Estado global com persistência
-- **React Hook Form** + **Zod** - Formulários e validação
+- **Zustand** - Estado global com persistencia
+- **Docker** + **Nginx** - Containerizacao e proxy reverso
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-- ✅ Painel Cognitivo Personalizável
-- ✅ Organizador de Tarefas com Kanban
-- ✅ Timer Pomodoro adaptável
-- ✅ Perfil com configurações persistentes
-- ✅ Níveis de complexidade ajustáveis
-- ✅ Modo foco e controles de acessibilidade
+- Painel Cognitivo Personalizavel
+- Organizador de Tarefas com Kanban
+- Timer Pomodoro adaptavel
+- Perfil com configuracoes persistentes
+- Niveis de complexidade ajustaveis
+- Modo foco e controles de acessibilidade
 
-## 📁 Estrutura
+## Documentacao
 
-```
-src/
-├── domain/entities/   # Entidades de domínio (Clean Architecture)
-├── store/             # Estado global (Zustand)
-├── components/        # Componentes reutilizáveis
-├── pages/             # Páginas da aplicação
-└── theme/             # Tema e estilos
+- **[README_MINDEASE.md](./README_MINDEASE.md)** - Documentacao detalhada do projeto
+- **[docs/DOCKER.md](./docs/DOCKER.md)** - Guia de deployment Docker
+- **[docs/roadmap.md](./docs/roadmap.md)** - Roadmap e status de implementacao
+
+## Deploy
+
+### Producao (VPS)
+
+```bash
+# Deploy inicial
+PORT=80 ./scripts/docker-prod.sh deploy
+
+# Atualizacao
+./scripts/docker-prod.sh update
 ```
 
 ---
 
-**MindEase** - Tecnologia para Todos 🧠💙
+**MindEase** - Tecnologia para Todos

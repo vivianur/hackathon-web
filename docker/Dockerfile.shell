@@ -1,0 +1,43 @@
+# Build stage
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+# Copy package files
+COPY package*.json ./
+COPY apps/shell/package*.json ./apps/shell/
+COPY packages/shared/package*.json ./packages/shared/
+
+# Install dependencies
+RUN npm ci --workspace=@mindease/shell --workspace=@mindease/shared --include-workspace-root
+
+# Copy source code
+COPY packages/shared ./packages/shared
+COPY apps/shell ./apps/shell
+COPY tsconfig*.json ./
+
+# Build arguments for remote URLs (using proxy paths with full remoteEntry.js path)
+ARG DASHBOARD_URL=http://localhost:3000/mf/dashboard/assets/remoteEntry.js
+ARG TASKS_URL=http://localhost:3000/mf/tasks/assets/remoteEntry.js
+ARG PROFILE_URL=http://localhost:3000/mf/profile/assets/remoteEntry.js
+
+# Update vite config with production remote URLs
+RUN sed -i 's|dashboard: "http://localhost:3000/mf/dashboard/assets/remoteEntry.js"|dashboard: "'"${DASHBOARD_URL}"'"|g' apps/shell/vite.config.ts && \
+    sed -i 's|tasks: "http://localhost:3000/mf/tasks/assets/remoteEntry.js"|tasks: "'"${TASKS_URL}"'"|g' apps/shell/vite.config.ts && \
+    sed -i 's|profile: "http://localhost:3000/mf/profile/assets/remoteEntry.js"|profile: "'"${PROFILE_URL}"'"|g' apps/shell/vite.config.ts
+
+# Build the app
+RUN npm run build -w @mindease/shell
+
+# Production stage
+FROM nginx:alpine
+
+# Copy nginx config
+COPY docker/nginx/nginx.conf /etc/nginx/nginx.conf
+
+# Copy built assets
+COPY --from=builder /app/apps/shell/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

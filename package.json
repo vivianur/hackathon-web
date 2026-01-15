@@ -25,7 +25,13 @@
 		"lint": "eslint .",
 		"dev:legacy": "vite",
 		"build:legacy": "tsc -b && vite build",
-		"preview:legacy": "vite preview"
+		"preview:legacy": "vite preview",
+		"docker:local": "./scripts/docker-local.sh",
+		"docker:local:up": "./scripts/docker-local.sh up",
+		"docker:local:down": "./scripts/docker-local.sh down",
+		"docker:prod": "./scripts/docker-prod.sh",
+		"docker:prod:deploy": "./scripts/docker-prod.sh deploy",
+		"docker:prod:update": "./scripts/docker-prod.sh update"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
