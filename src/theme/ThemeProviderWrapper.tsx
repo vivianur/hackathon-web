@@ -37,7 +37,7 @@ export default function ThemeProviderWrapper({ children }: { children: React.Rea
         },
         typography: {
           fontSize: 14 * fontSizeMultiplier,
-          h1: { fontSize: `${2.5 * fontSizeMultiplier}rem` },
+          h1: { fontSize: `${2.3 * fontSizeMultiplier}rem` },
           h2: { fontSize: `${2 * fontSizeMultiplier}rem` },
           h3: { fontSize: `${1.75 * fontSizeMultiplier}rem` },
           h4: { fontSize: `${1.5 * fontSizeMultiplier}rem` },

@@ -6,11 +6,13 @@ import AccessibleContainer from '../components/AccessibleContainer';
 import FocusCard from '../components/FocusCard';
 import { useProfileStore } from '../store/profileStore';
 import { useAnimations } from '../hooks/useAnimations';
+import { useSpacing } from '../hooks/useSpacing';
 
 export default function Perfil() {
   const { profile, setProfile, updateProfile, updateStudyRoutine, addNeurodivergence, removeNeurodivergence } = useProfileStore();
   const [isEditing, setIsEditing] = useState(false);
   const animations = useAnimations();
+  const spacing = useSpacing();
 
   useEffect(() => {
     // Criar perfil inicial se não existir
@@ -85,7 +87,7 @@ export default function Perfil() {
             </Typography>
           </Box>
 
-          <Grid container spacing={3}>
+          <Grid container spacing={spacing.gridSpacing}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 fullWidth
@@ -128,7 +130,7 @@ export default function Perfil() {
           </Grid>
         </Paper>
 
-        <FocusCard title="Neurodivergências" icon={<Psychology color="primary" />} defaultExpanded>
+        <FocusCard title="Neurodivergências" icon={<Psychology color="primary" />}>
           <ThemedAlert severity="info" sx={{ mb: 3, pl: 1 }}>
             Identifique suas necessidades para que possamos personalizar melhor sua experiência.
           </ThemedAlert>
@@ -161,7 +163,7 @@ export default function Perfil() {
         </FocusCard>
 
         <FocusCard title="Rotina de Estudo" icon={<AccessTime color="primary" />}>
-          <Grid container spacing={3}>
+          <Grid container spacing={spacing.gridSpacing}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <FormControl fullWidth>
                 <InputLabel>Período Preferido</InputLabel>

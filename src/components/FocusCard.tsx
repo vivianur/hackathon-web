@@ -1,10 +1,10 @@
 import { Box, Card, CardContent, Typography, IconButton, Collapse } from '@mui/material';
 import { ExpandMore, ExpandLess } from '@mui/icons-material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
-import { useAccessibilityStore } from '../store/accessibilityStore';
 import { useThemeStore } from '../store/themeStore';
 import { useAnimations } from '../hooks/useAnimations';
+import { useSpacingMultiplier } from '../context/SpacingContext';
 
 interface FocusCardProps {
   title: string;
@@ -14,40 +14,48 @@ interface FocusCardProps {
   variant?: 'outlined' | 'elevation';
 }
 
+// Armazena o estado de expansão de cada card globalmente
+const expandedStates: Record<string, boolean> = {};
+
 export default function FocusCard({ 
   title, 
   children, 
   icon, 
-  defaultExpanded = false,
   variant = 'outlined'
 }: FocusCardProps) {
-  const [expanded, setExpanded] = useState(defaultExpanded);
-  const { complexityLevel, detailedMode } = useAccessibilityStore();
+  const cardKey = `focus-card-${title}`;
+  const [expanded, setExpanded] = useState(() => expandedStates[cardKey] ?? false);
+  
+  // Atualiza o estado global sempre que o local mudar
+  useEffect(() => {
+    expandedStates[cardKey] = expanded;
+  }, [expanded, cardKey]);
+  
   const mode = useThemeStore((state) => state.mode);
   const animations = useAnimations();
-
-  // Em modo simples, sempre expandido
-  const isExpanded = complexityLevel === 'simple' || detailedMode ? true : expanded;
+  const spacingMultiplier = useSpacingMultiplier();
 
   return (
     <Card 
       variant={variant}
       sx={{ 
-        mb: 1,
+        mb: `${1 * spacingMultiplier}rem`,
         backgroundColor: mode === 'dark' ? '#050505' : undefined,
         ...animations.slideUp,
         ...animations.cardHover,
       }}
     >
-      <CardContent sx={{ cursor: complexityLevel !== 'simple' && !detailedMode ? 'pointer' : 'default' }} onClick={() => complexityLevel !== 'simple' && !detailedMode && setExpanded(!expanded)}>
+      <CardContent>
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            mb: isExpanded ? 2 : 0,
+            mb: expanded ? 2 : 0,
             userSelect: 'none',
+            cursor: 'pointer',
           }}
+          onClick={() => setExpanded(!expanded)}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             {icon}
@@ -55,20 +63,15 @@ export default function FocusCard({
               {title}
             </Typography>
           </Box>
-          {complexityLevel !== 'simple' && !detailedMode && (
-            <IconButton
-              onClick={(e) => {
-                e.stopPropagation();
-                setExpanded(!expanded);
-              }}
-              size="small"
-              aria-label={expanded ? 'Recolher' : 'Expandir'}
-            >
-              {expanded ? <ExpandLess /> : <ExpandMore />}
-            </IconButton>
-          )}
+          <IconButton
+            onClick={() => setExpanded(!expanded)}
+            size="small"
+            aria-label={expanded ? 'Recolher' : 'Expandir'}
+          >
+            {expanded ? <ExpandLess /> : <ExpandMore />}
+          </IconButton>
         </Box>
-        <Collapse in={isExpanded} timeout="auto">
+        <Collapse in={expanded} timeout="auto">
           {children}
         </Collapse>
       </CardContent>

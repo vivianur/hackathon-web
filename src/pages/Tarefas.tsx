@@ -6,11 +6,13 @@ import TaskDialog from '../components/TaskDialog';
 import TaskCard from '../components/TaskCard';
 import PomodoroTimer from '../components/PomodoroTimer';
 import { useTaskStore } from '../store/taskStore';
+import { useSpacing } from '../hooks/useSpacing';
 import type { TaskStatus } from '../domain/entities/Task';
 
 export default function Tarefas() {
   const [view, setView] = useState<'kanban' | 'list'>('kanban');
   const tasks = useTaskStore((state) => state.tasks);
+  const spacing = useSpacing();
 
   const columns: { status: TaskStatus; title: string; color: string }[] = [
     { status: 'todo', title: 'A Fazer', color: '#ed6c02' },
@@ -55,7 +57,7 @@ export default function Tarefas() {
         <PomodoroTimer />
 
         {view === 'kanban' ? (
-          <Grid container spacing={3}>
+          <Grid container spacing={spacing.gridSpacing}>
             {columns.map((column) => {
               const columnTasks = getTasksByStatus(column.status);
               return (
