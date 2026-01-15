@@ -36,7 +36,7 @@ export default function Explore() {
   ];
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <Container maxWidth="lg" sx={{ pt: 4, pb: 4 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
         <ExploreIcon sx={{ fontSize: 40, mr: 2, color: 'primary.main' }} />
         <Box>

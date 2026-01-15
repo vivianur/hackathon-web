@@ -3,6 +3,8 @@ import { ExpandMore, ExpandLess } from '@mui/icons-material';
 import { useState } from 'react';
 import type { ReactNode } from 'react';
 import { useAccessibilityStore } from '../store/accessibilityStore';
+import { useThemeStore } from '../store/themeStore';
+import { useAnimations } from '../hooks/useAnimations';
 
 interface FocusCardProps {
   title: string;
@@ -21,6 +23,8 @@ export default function FocusCard({
 }: FocusCardProps) {
   const [expanded, setExpanded] = useState(defaultExpanded);
   const { complexityLevel, detailedMode } = useAccessibilityStore();
+  const mode = useThemeStore((state) => state.mode);
+  const animations = useAnimations();
 
   // Em modo simples, sempre expandido
   const isExpanded = complexityLevel === 'simple' || detailedMode ? true : expanded;
@@ -29,20 +33,20 @@ export default function FocusCard({
     <Card 
       variant={variant}
       sx={{ 
-        mb: 2,
-        transition: 'all 0.3s ease',
-        '&:hover': {
-          boxShadow: 3,
-        }
+        mb: 1,
+        backgroundColor: mode === 'dark' ? '#050505' : undefined,
+        ...animations.slideUp,
+        ...animations.cardHover,
       }}
     >
-      <CardContent>
+      <CardContent sx={{ cursor: complexityLevel !== 'simple' && !detailedMode ? 'pointer' : 'default' }} onClick={() => complexityLevel !== 'simple' && !detailedMode && setExpanded(!expanded)}>
         <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             mb: isExpanded ? 2 : 0,
+            userSelect: 'none',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -53,7 +57,10 @@ export default function FocusCard({
           </Box>
           {complexityLevel !== 'simple' && !detailedMode && (
             <IconButton
-              onClick={() => setExpanded(!expanded)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setExpanded(!expanded);
+              }}
               size="small"
               aria-label={expanded ? 'Recolher' : 'Expandir'}
             >

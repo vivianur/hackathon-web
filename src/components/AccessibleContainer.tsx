@@ -2,6 +2,7 @@ import { Box } from '@mui/material';
 import type { SxProps, Theme } from '@mui/material';
 import type { ReactNode } from 'react';
 import { useAccessibilityStore } from '../store/accessibilityStore';
+import { useThemeStore } from '../store/themeStore';
 
 interface AccessibleContainerProps {
   children: ReactNode;
@@ -11,6 +12,7 @@ interface AccessibleContainerProps {
 
 export default function AccessibleContainer({ children, sx, disableFocusBlur = false }: AccessibleContainerProps) {
   const { fontSize, spacing, contrastLevel, focusMode } = useAccessibilityStore();
+  const mode = useThemeStore((state) => state.mode);
 
   const getFontSizeMultiplier = () => {
     switch (fontSize) {
@@ -32,13 +34,24 @@ export default function AccessibleContainer({ children, sx, disableFocusBlur = f
   };
 
   const getContrastStyles = () => {
+    // Modo claro
+    if (mode === 'light') {
+      switch (contrastLevel) {
+        case 'low':
+          return { filter: 'contrast(0.9)' };
+        case 'medium':
+          return { filter: 'contrast(1.2)' };
+        default:
+          return {};
+      }
+    }
+
+    // Modo escuro
     switch (contrastLevel) {
       case 'low':
-        return { filter: 'contrast(0.9)' };
+        return { filter: 'contrast(1.2)' };
       case 'medium':
-        return {};
-      case 'high':
-        return { filter: 'contrast(1.2)', fontWeight: 500 };
+        return { filter: 'contrast(0.8)' };
       default:
         return {};
     }
@@ -49,7 +62,7 @@ export default function AccessibleContainer({ children, sx, disableFocusBlur = f
       sx={{
         fontSize: `${getFontSizeMultiplier()}rem`,
         '& > *': {
-          marginBottom: `${getSpacingMultiplier()}rem`,
+          paddingBottom: `${getSpacingMultiplier()}rem`,
         },
         ...getContrastStyles(),
         ...(focusMode && !disableFocusBlur ? {
@@ -61,7 +74,7 @@ export default function AccessibleContainer({ children, sx, disableFocusBlur = f
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.3)',
+            backgroundColor: mode === 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.15)',
             backdropFilter: 'blur(2px)',
             pointerEvents: 'none',
             zIndex: -1,

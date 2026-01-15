@@ -1,5 +1,5 @@
 export type ComplexityLevel = 'simple' | 'moderate' | 'detailed';
-export type ContrastLevel = 'low' | 'medium' | 'high';
+export type ContrastLevel = 'low' | 'medium';
 export type FontSize = 'small' | 'medium' | 'large' | 'extra-large';
 export type Spacing = 'compact' | 'comfortable' | 'spacious';
 
