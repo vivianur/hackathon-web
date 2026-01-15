@@ -3,6 +3,7 @@ import type { SxProps, Theme } from '@mui/material';
 import type { ReactNode } from 'react';
 import { useAccessibilityStore } from '../store/accessibilityStore';
 import { useThemeStore } from '../store/themeStore';
+import { SpacingProvider } from '../context/SpacingContext';
 
 interface AccessibleContainerProps {
   children: ReactNode;
@@ -26,10 +27,10 @@ export default function AccessibleContainer({ children, sx, disableFocusBlur = f
 
   const getSpacingMultiplier = () => {
     switch (spacing) {
-      case 'compact': return 1;
-      case 'comfortable': return 1.5;
+      case 'compact': return 0.5; 
+      case 'comfortable': return 1;
       case 'spacious': return 2;
-      default: return 1.5;
+      default: return 1;
     }
   };
 
@@ -58,32 +59,34 @@ export default function AccessibleContainer({ children, sx, disableFocusBlur = f
   };
 
   return (
-    <Box
-      sx={{
-        fontSize: `${getFontSizeMultiplier()}rem`,
-        '& > *': {
-          paddingBottom: `${getSpacingMultiplier()}rem`,
-        },
-        ...getContrastStyles(),
-        ...(focusMode && !disableFocusBlur ? {
-          position: 'relative',
-          '&::before': {
-            content: '""',
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: mode === 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.15)',
-            backdropFilter: 'blur(2px)',
-            pointerEvents: 'none',
-            zIndex: -1,
-          }
-        } : {}),
-        ...sx,
-      }}
-    >
-      {children}
-    </Box>
+    <SpacingProvider multiplier={getSpacingMultiplier()}>
+      <Box
+        sx={{
+          fontSize: `${getFontSizeMultiplier()}rem`,
+          '& > *': {
+            paddingBottom: `${getSpacingMultiplier()}rem`,
+          },
+          ...getContrastStyles(),
+          ...(focusMode && !disableFocusBlur ? {
+            position: 'relative',
+            '&::before': {
+              content: '""',
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: mode === 'light' ? 'rgba(0, 0, 0, 0.3)' : 'rgba(255, 255, 255, 0.15)',
+              backdropFilter: 'blur(2px)',
+              pointerEvents: 'none',
+              zIndex: -1,
+            }
+          } : {}),
+          ...sx,
+        }}
+      >
+        {children}
+      </Box>
+    </SpacingProvider>
   );
 }

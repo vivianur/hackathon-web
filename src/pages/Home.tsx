@@ -4,10 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import AccessibleContainer from '../components/AccessibleContainer';
 import AnimatedCard from '../components/AnimatedCard';
 import { useAnimations } from '../hooks/useAnimations';
+import { useThemeStore } from '../store/themeStore';
+import { useSpacing } from '../hooks/useSpacing';
 
 export default function Home() {
   const navigate = useNavigate();
   const animations = useAnimations();
+  const mode = useThemeStore((state) => state.mode);
+  const spacing = useSpacing();
 
   const features = [
     {
@@ -61,7 +65,7 @@ export default function Home() {
           </Typography>
         </Box>
 
-        <Grid container spacing={3} sx={{ mb: 6 }}>
+        <Grid container spacing={spacing.gridSpacing} sx={{ mb: 6 }}>
           {features.map((feature, index) => (
             <Grid size={{ xs: 12, sm: 6, md: 3 }} key={feature.path} sx={animations.staggerDelay(index)}>
               <AnimatedCard
@@ -72,12 +76,27 @@ export default function Home() {
                   cursor: 'pointer',
                   transition: 'all 0.3s',
                   ...animations.cardHover,
-                  ...(animations.level === 'detailed' && {
+                  ...(animations.level === 'detailed' && mode === 'light' && {
                     '&:hover': {
                       transform: 'translateY(-10px)',
                       boxShadow: '0 10px 30px rgba(255, 121, 198, 0.25)',
                       borderColor: feature.color,
                       backgroundColor: feature.hoverBg,
+                    },
+                  }),
+                  ...(animations.level === 'detailed' && mode === 'dark' && {
+                    '&:hover': {
+                      transform: 'translateY(-10px)',
+                      boxShadow: `0 10px 30px ${feature.color}50`,
+                      borderColor: feature.color,
+                      backgroundColor: `${feature.color}20`,
+                    },
+                  }),
+                  ...(mode === 'dark' && {
+                    '&:hover': {
+                      boxShadow: `0 5px 20px ${feature.color}40`,
+                      borderColor: feature.color,
+                      backgroundColor: `${feature.color}15`,
                     },
                   }),
                 }}
@@ -141,7 +160,7 @@ export default function Home() {
           <Typography variant="h5" gutterBottom fontWeight="bold">
             🎯 Recursos Principais
           </Typography>
-          <Grid container spacing={2} sx={{ mt: 2 }}>
+          <Grid container spacing={spacing.gridSpacing} sx={{ mt: 2 }}>
             <Grid size={{ xs: 12, md: 6 }}>
               <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
                 <Dashboard />

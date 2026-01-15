@@ -49,7 +49,7 @@ export default function Painel() {
         <Grid container spacing={0}>
           {/* Nível de Complexidade */}
           <Grid size={{ xs: 12 }} sx={animations.staggerDelay(0)}>
-            <FocusCard title="Nível de Complexidade" icon={<TextFields color="primary" />} defaultExpanded>
+            <FocusCard title="Nível de Complexidade" icon={<TextFields color="primary" />}>
               <FormControl fullWidth sx={{ mt: 2 }}>
                 <InputLabel>Complexidade da Interface</InputLabel>
                 <Select
@@ -81,7 +81,7 @@ export default function Painel() {
 
           {/* Modos de Visualização */}
           <Grid size={{ xs: 12 }} sx={animations.staggerDelay(1)}>
-            <FocusCard title="Modos de Visualização" icon={<Visibility color="primary" />} defaultExpanded>
+            <FocusCard title="Modos de Visualização" icon={<Visibility color="primary" />}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
                 <FormControlLabel
                   control={
