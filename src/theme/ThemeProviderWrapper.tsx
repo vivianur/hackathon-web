@@ -6,6 +6,7 @@ import { useAccessibilityStore } from '../store/accessibilityStore';
 export default function ThemeProviderWrapper({ children }: { children: React.ReactNode }) {
   const mode = useThemeStore((state) => state.mode);
   const fontSize = useAccessibilityStore((state) => state.fontSize);
+  const detailedMode = useAccessibilityStore((state) => state.detailedMode);
 
   const getFontSizeMultiplier = () => {
     switch (fontSize) {
@@ -25,10 +26,34 @@ export default function ThemeProviderWrapper({ children }: { children: React.Rea
         palette: {
           mode,
           primary: {
-            main: mode === 'light' ? '#be0078cc' : '#ff00d0',
+            main: detailedMode 
+              ? (mode === 'light' ? '#333333' : '#cccccc')
+              : (mode === 'light' ? '#be0078cc' : '#ff00d0'),
           },
           secondary: {
-            main: mode === 'light' ? '#dc004e' : '#ff00d0',
+            main: detailedMode 
+              ? (mode === 'light' ? '#666666' : '#999999')
+              : (mode === 'light' ? '#dc004e' : '#ff00d0'),
+          },
+          error: {
+            main: detailedMode 
+              ? (mode === 'light' ? '#444444' : '#aaaaaa')
+              : (mode === 'light' ? '#d32f2f' : '#f44336'),
+          },
+          warning: {
+            main: detailedMode 
+              ? (mode === 'light' ? '#555555' : '#999999')
+              : (mode === 'light' ? '#f57c00' : '#ff9800'),
+          },
+          info: {
+            main: detailedMode 
+              ? (mode === 'light' ? '#666666' : '#888888')
+              : (mode === 'light' ? '#1976d2' : '#2196f3'),
+          },
+          success: {
+            main: detailedMode 
+              ? (mode === 'light' ? '#333333' : '#aaaaaa')
+              : (mode === 'light' ? '#388e3c' : '#4caf50'),
           },
           background: {
             default: mode === 'light' ? '#f5f5f5' : '#121212',
@@ -52,14 +77,29 @@ export default function ThemeProviderWrapper({ children }: { children: React.Rea
           MuiAppBar: {
             styleOverrides: {
               root: {
-                backgroundColor: mode === 'light' ? '#be0079' : '#1e1e1e',
-                color: mode === 'light' ? '#ffffff' : '#ff00d0',
+                backgroundColor: detailedMode
+                  ? (mode === 'light' ? '#333333' : '#1e1e1e')
+                  : (mode === 'light' ? '#be0079' : '#1e1e1e'),
+                color: detailedMode
+                  ? (mode === 'light' ? '#ffffff' : '#cccccc')
+                  : (mode === 'light' ? '#ffffff' : '#ff00d0'),
+              },
+            },
+          },
+          MuiSwitch: {
+            styleOverrides: {
+              root: {
+                '&:not(.Mui-checked) .MuiSwitch-thumb': {
+                  boxShadow: mode === 'light' 
+                    ? '0 2px 8px rgba(0, 0, 0, 0.5)' 
+                    : 'none',
+                },
               },
             },
           },
         },
       }),
-    [mode, fontSizeMultiplier]
+    [mode, fontSizeMultiplier, detailedMode]
   );
 
   return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
