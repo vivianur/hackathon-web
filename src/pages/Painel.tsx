@@ -110,9 +110,9 @@ export default function Painel() {
                   }
                   label={
                     <Box>
-                      <Typography>Modo Detalhado</Typography>
+                      <Typography>Modo Monocromático</Typography>
                       <Typography variant="caption" color="text.secondary">
-                        Mostra todas as informações e opções
+                        Remove todas as cores da interface
                       </Typography>
                     </Box>
                   }

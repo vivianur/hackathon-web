@@ -7,12 +7,16 @@ import FocusCard from '../components/FocusCard';
 import { useProfileStore } from '../store/profileStore';
 import { useAnimations } from '../hooks/useAnimations';
 import { useSpacing } from '../hooks/useSpacing';
+import { useAccessibilityStore } from '../store/accessibilityStore';
+import { useThemeStore } from '../store/themeStore';
 
 export default function Perfil() {
   const { profile, setProfile, updateProfile, updateStudyRoutine, addNeurodivergence, removeNeurodivergence } = useProfileStore();
   const [isEditing, setIsEditing] = useState(false);
   const animations = useAnimations();
   const spacing = useSpacing();
+  const detailedMode = useAccessibilityStore((state) => state.detailedMode);
+  const mode = useThemeStore((state) => state.mode);
 
   useEffect(() => {
     // Criar perfil inicial se não existir
@@ -70,7 +74,9 @@ export default function Perfil() {
               width: 100, 
               height: 100, 
               mb: 2, 
-              bgcolor: 'primary.main',
+              bgcolor: detailedMode
+                ? (mode === 'light' ? '#666666' : '#999999')
+                : 'primary.main',
               ...(animations.level === 'detailed' && {
                 animation: 'pulse 2s ease-in-out infinite',
                 '@keyframes pulse': {
@@ -234,7 +240,14 @@ export default function Perfil() {
           </Grid>
         </FocusCard>
 
-        <Paper sx={{ p: 3, mt: 3, bgcolor: 'primary.main', color: 'white' }}>
+        <Paper sx={{ 
+          p: 3, 
+          mt: 3, 
+          bgcolor: detailedMode
+            ? (mode === 'light' ? '#666666' : '#999999')
+            : 'primary.main', 
+          color: 'white' 
+        }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <LocalCafe sx={{ fontSize: 40 }} />
             <Box>
