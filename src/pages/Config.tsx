@@ -1,15 +1,17 @@
-import { Container, Typography, Box, Switch, FormControlLabel, Divider, Button, Alert } from '@mui/material';
+import { Container, Typography, Box, Switch, FormControlLabel, Button, Alert } from '@mui/material';
 import ThemedAlert from '../components/ThemedAlert';
 import { RestartAlt, Notifications, VolumeUp, EmojiEvents, Undo } from '@mui/icons-material';
 import AccessibleContainer from '../components/AccessibleContainer';
 import FocusCard from '../components/FocusCard';
 import { useProfileStore } from '../store/profileStore';
 import { useAccessibilityStore } from '../store/accessibilityStore';
+import { useThemeStore } from '../store/themeStore';
 import { useAnimations } from '../hooks/useAnimations';
 
 export default function Config() {
   const { profile, updatePreferences } = useProfileStore();
   const { resetToDefaults } = useAccessibilityStore();
+  const { resetToDefault: resetTheme } = useThemeStore();
   const animations = useAnimations();
 
   if (!profile) {
@@ -27,6 +29,7 @@ export default function Config() {
   const handleReset = () => {
     if (window.confirm('Tem certeza que deseja restaurar todas as configurações para os valores padrão?')) {
       resetToDefaults();
+      resetTheme();
       updatePreferences({
         notifications: true,
         soundEffects: true,
@@ -50,7 +53,7 @@ export default function Config() {
           As configurações de acessibilidade estão disponíveis no Painel Cognitivo
         </ThemedAlert>
 
-        <FocusCard title="Notificações" icon={<Notifications color="primary" />} defaultExpanded>
+        <FocusCard title="Notificações" icon={<Notifications color="primary" />}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
             <FormControlLabel
               control={
@@ -133,8 +136,6 @@ export default function Config() {
           </Box>
         </FocusCard>
 
-        <Divider sx={{ my: 4 }} />
-
         <FocusCard title="Restaurar Padrões" icon={<Undo color="primary" />}>
           <ThemedAlert severity="warning" sx={{ mb: 2, pl: 1 }}>
             Esta ação irá restaurar todas as configurações de acessibilidade e preferências
@@ -151,7 +152,7 @@ export default function Config() {
           </Button>
         </FocusCard>
 
-        <Box sx={{ mt: 4 }}>
+        <Box sx={{ mt: 3 }}>
           <ThemedAlert severity="info">
             <Typography variant="body2" fontWeight="medium" gutterBottom>
               Dica: Configurações Salvas Automaticamente
