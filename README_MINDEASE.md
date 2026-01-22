@@ -78,7 +78,7 @@ src/
 │   ├── Tarefas.tsx
 │   ├── Perfil.tsx
 │   ├── Config.tsx
-│   └── Explore.tsx
+│   └── Plataforma.tsx
 └── theme/                # Tema e estilos
     └── ThemeProviderWrapper.tsx
 ```
