@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Box, useTheme, useMediaQuery, Tooltip } from '@mui/material';
-import { Menu as MenuIcon, Home, Dashboard, Assignment, Person, Settings, Explore, Brightness4, Brightness7 } from '@mui/icons-material';
+import { Menu as MenuIcon, Home, Dashboard, Assignment, Person, Settings, Language, Brightness4, Brightness7 } from '@mui/icons-material';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useThemeStore } from '../store/themeStore';
@@ -7,11 +7,11 @@ import { useAnimations } from '../hooks/useAnimations';
 
 const menuItems = [
   { title: 'Home', path: '/', icon: <Home /> },
-  { title: 'Painel', path: '/painel', icon: <Dashboard /> },
+  { title: 'Plataforma', path: '/plataforma', icon: <Language /> },
   { title: 'Tarefas', path: '/tarefas', icon: <Assignment /> },
+  { title: 'Painel', path: '/painel', icon: <Dashboard /> },
   { title: 'Perfil', path: '/perfil', icon: <Person /> },
   { title: 'Config.', path: '/config', icon: <Settings /> },
-  { title: 'Explore', path: '/explore', icon: <Explore /> },
 ];
 
 export default function Navbar() {
@@ -116,6 +116,7 @@ export default function Navbar() {
                   to={item.path}
                   startIcon={item.icon}
                   sx={{
+                    textTransform: 'none',
                     backgroundColor: location.pathname === item.path ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
                     transition: 'all 0.2s ease',
                     ...(animations.shouldAnimate && {

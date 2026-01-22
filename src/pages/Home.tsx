@@ -1,5 +1,5 @@
 import { Container, Typography, Box, Paper, Grid, Button } from '@mui/material';
-import { Dashboard, Assignment, Person, Settings, Psychology, AccessTime } from '@mui/icons-material';
+import { Dashboard, Assignment, Person, Settings, Psychology, AccessTime, Language } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import AccessibleContainer from '../components/AccessibleContainer';
 import AnimatedCard from '../components/AnimatedCard';
@@ -13,6 +13,7 @@ export default function Home() {
   const animations = useAnimations();
   const mode = useThemeStore((state) => state.mode);
   const detailedMode = useAccessibilityStore((state) => state.detailedMode);
+  const complexityLevel = useAccessibilityStore((state) => state.complexityLevel);
   const spacing = useSpacing();
 
   const getFeatureColor = (originalColor: string) => {
@@ -33,10 +34,10 @@ export default function Home() {
 
   const features = [
     {
-      icon: <Dashboard sx={{ fontSize: 48 }} />,
-      title: 'Painel Cognitivo',
-      description: 'Personalize a interface de acordo com suas necessidades cognitivas',
-      path: '/painel',
+      icon: <Language sx={{ fontSize: 48 }} />,
+      title: 'Plataforma',
+      description: 'Explore ferramentas e recursos disponíveis na plataforma',
+      path: '/plataforma',
       color: getFeatureColor('#1976d2'),
       hoverBg: getHoverBg('rgba(25, 118, 210, 0.12)', '#1976d2'),
     },
@@ -49,20 +50,28 @@ export default function Home() {
       hoverBg: getHoverBg('rgba(237, 108, 2, 0.12)', '#ed6c02'),
     },
     {
+      icon: <Dashboard sx={{ fontSize: 48 }} />,
+      title: 'Painel Cognitivo',
+      description: 'Personalize a interface de acordo com suas necessidades cognitivas',
+      path: '/painel',
+      color: getFeatureColor('#2e7d32'),
+      hoverBg: getHoverBg('rgba(46, 125, 50, 0.12)', '#2e7d32'),
+    },
+    {
       icon: <Person sx={{ fontSize: 48 }} />,
       title: 'Perfil',
       description: 'Configure suas preferências e rotina de estudos',
       path: '/perfil',
-      color: getFeatureColor('#2e7d32'),
-      hoverBg: getHoverBg('rgba(46, 125, 50, 0.12)', '#2e7d32'),
+      color: getFeatureColor('#9c27b0'),
+      hoverBg: getHoverBg('rgba(156, 39, 176, 0.12)', '#9c27b0'),
     },
     {
       icon: <Settings sx={{ fontSize: 48 }} />,
       title: 'Configurações',
       description: 'Ajuste notificações e preferências do sistema',
       path: '/config',
-      color: getFeatureColor('#9c27b0'),
-      hoverBg: getHoverBg('rgba(156, 39, 176, 0.12)', '#9c27b0'),
+      color: getFeatureColor('#d32f2f'),
+      hoverBg: getHoverBg('rgba(211, 47, 47, 0.12)', '#d32f2f'),
     },
   ];
 
@@ -85,7 +94,7 @@ export default function Home() {
 
         <Grid container spacing={spacing.gridSpacing} sx={{ mb: 6 }}>
           {features.map((feature, index) => (
-            <Grid size={{ xs: 12, sm: 6, md: 3 }} key={feature.path} sx={animations.staggerDelay(index)}>
+            <Grid size={{ xs: 12, sm: 6, md: 2.4 }} key={feature.path} sx={animations.staggerDelay(index)}>
               <AnimatedCard
                 animationType="grow"
                 delay={index * 100}
@@ -152,6 +161,7 @@ export default function Home() {
           sx={{
             p: 4,
             mb: 4,
+             textAlign: 'center',
             background: detailedMode
               ? (mode === 'light' 
                 ? 'linear-gradient(135deg, #666666 0%, #555555 100%)' 
@@ -186,9 +196,9 @@ export default function Home() {
           <Typography variant="h5" gutterBottom fontWeight="bold">
             🎯 Recursos Principais
           </Typography>
-          <Grid container spacing={spacing.gridSpacing} sx={{ mt: 2 }}>
+          <Grid container spacing={spacing.gridSpacing} sx={{ mt: 2, justifyContent: 'center' }}>
             <Grid size={{ xs: 12, md: 6 }}>
-              <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+              <Box sx={{ display: 'flex', gap: 2, mb: 2, justifyContent: 'center', alignItems: 'center' }}>
                 <Dashboard />
                 <Box>
                   <Typography variant="subtitle1" fontWeight="bold">
@@ -201,7 +211,7 @@ export default function Home() {
               </Box>
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
-              <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+              <Box sx={{ display: 'flex', gap: 2, mb: 2, justifyContent: 'center', alignItems: 'center' }}>
                 <Assignment />
                 <Box>
                   <Typography variant="subtitle1" fontWeight="bold">
@@ -214,7 +224,7 @@ export default function Home() {
               </Box>
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
-              <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+              <Box sx={{ display: 'flex', gap: 2, mb: 2, justifyContent: 'center', alignItems: 'center' }}>
                 <Psychology />
                 <Box>
                   <Typography variant="subtitle1" fontWeight="bold">
@@ -227,7 +237,7 @@ export default function Home() {
               </Box>
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>
-              <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+              <Box sx={{ display: 'flex', gap: 2, mb: 2, justifyContent: 'center', alignItems: 'center' }}>
                 <AccessTime />
                 <Box>
                   <Typography variant="subtitle1" fontWeight="bold">
@@ -242,42 +252,45 @@ export default function Home() {
           </Grid>
         </Paper>
 
-        <Paper sx={{ 
-          p: 3, 
-          bgcolor: detailedMode 
-            ? (mode === 'light' ? '#666666' : '#888888')
-            : 'info.main', 
-          color: 'white', 
-          ...animations.slideUp 
-        }}>
-          <Typography variant="h6" gutterBottom fontWeight="bold">
-            🧠 Suporte para Neurodivergências
-          </Typography>
-          <Typography variant="body1">
-            TDAH • TEA (Autismo) • Dislexia • Burnout • Ansiedade • Sobrecarga Sensorial
-          </Typography>
-          <Button
-            variant="contained"
-            sx={{
-              mt: 2,
-              bgcolor: 'white',
-              color: 'info.main',
-              '&:hover': { bgcolor: 'grey.100' },
-              ...(animations.level === 'detailed' && {
-                boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
-                transform: 'translateY(0)',
-                transition: 'all 0.2s ease',
-                '&:hover': {
-                  transform: 'translateY(-3px) scale(1.01)',
-                  boxShadow: '0 12px 30px rgba(0,0,0,0.18)',
-                },
-              }),
-            }}
-            onClick={() => navigate('/perfil')}
-          >
-            Configure seu Perfil
-          </Button>
-        </Paper>
+        {complexityLevel === 'detailed' && (
+          <Paper sx={{ 
+            p: 3, 
+            textAlign: 'center',
+            bgcolor: detailedMode 
+              ? (mode === 'light' ? '#666666' : '#888888')
+              : 'info.main', 
+            color: 'white', 
+            ...animations.slideUp 
+          }}>
+            <Typography variant="h6" gutterBottom fontWeight="bold">
+              🧠 Suporte para Neurodivergências
+            </Typography>
+            <Typography variant="body1">
+              TDAH • TEA (Autismo) • Dislexia • Burnout • Ansiedade • Sobrecarga Sensorial
+            </Typography>
+            <Button
+              variant="contained"
+              sx={{
+                mt: 2,
+                bgcolor: 'white',
+                color: 'info.main',
+                '&:hover': { bgcolor: 'grey.100' },
+                ...(animations.level === 'detailed' && ({
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
+                  transform: 'translateY(0)',
+                  transition: 'all 0.2s ease',
+                  '&:hover': {
+                    transform: 'translateY(-3px) scale(1.01)',
+                    boxShadow: '0 12px 30px rgba(0,0,0,0.18)',
+                  },
+                })),
+              }}
+              onClick={() => navigate('/perfil')}
+            >
+              Configure seu Perfil
+            </Button>
+          </Paper>
+        )}
       </Container>
     </AccessibleContainer>
   );

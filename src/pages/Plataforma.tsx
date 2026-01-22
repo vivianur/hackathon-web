@@ -1,14 +1,14 @@
 import { Container, Typography, Box, Card, CardContent, CardMedia, CardActions, Button, Grid } from '@mui/material';
-import { Explore as ExploreIcon } from '@mui/icons-material';
+import { Language as PlataformaIcon } from '@mui/icons-material';
 import AccessibleContainer from '../components/AccessibleContainer';
 import { useSpacing } from '../hooks/useSpacing';
 
-export default function Explore() {
+export default function Plataforma() {
   const spacing = useSpacing();
   const recursos = [
     {
       titulo: 'Inteligência Artificial',
-      descricao: 'Explore ferramentas e recursos de IA para otimizar seu trabalho.',
+      descricao: 'Conheça ferramentas e recursos de IA para otimizar seu trabalho.',
       imagem: 'https://via.placeholder.com/300x200?text=AI',
     },
     {
@@ -42,10 +42,10 @@ export default function Explore() {
     <AccessibleContainer>
       <Container maxWidth="lg" sx={{ pt: 4, pb: 4 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <ExploreIcon sx={{ fontSize: 40, mr: 2, color: 'primary.main' }} />
+          <PlataformaIcon sx={{ fontSize: 40, mr: 2, color: 'primary.main' }} />
           <Box>
             <Typography variant="h4" component="h1">
-              Explore
+              Plataforma
             </Typography>
             <Typography variant="body1" color="text.secondary">
               Descubra novos recursos e funcionalidades
