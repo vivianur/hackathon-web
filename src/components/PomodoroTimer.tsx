@@ -21,7 +21,7 @@ export default function PomodoroTimer() {
           addTimeToTask(pomodoro.taskId, 25); // 25 minutos padrão
         }
         
-        // Notificação sonora (opcional)
+        // Notificação sonora
         if ('Notification' in window && Notification.permission === 'granted') {
           new Notification('Pomodoro Concluído!', {
             body: pomodoro.currentPhase === 'focus' 

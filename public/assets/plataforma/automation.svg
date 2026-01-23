@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" role="img" aria-label="Ilustração de automação">
+  <defs>
+    <linearGradient id="ga" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#14b8a6" />
+    </linearGradient>
+  </defs>
+  <rect width="900" height="600" rx="32" fill="url(#ga)" />
+  <circle cx="300" cy="300" r="140" fill="rgba(255,255,255,0.15)" />
+  <circle cx="600" cy="280" r="110" fill="rgba(255,255,255,0.12)" />
+  <path d="M260 320h140v36H260z" fill="rgba(255,255,255,0.7)" />
+  <path d="M500 260h120v32H500z" fill="rgba(255,255,255,0.6)" />
+  <path d="M360 260h64v32h-64z" fill="rgba(255,255,255,0.6)" />
+  <path d="M470 360h140v32H470z" fill="rgba(255,255,255,0.65)" />
+  <text x="50%" y="82%" text-anchor="middle" fill="#fff" font-family="'Segoe UI', Arial, sans-serif" font-size="60" font-weight="700">Automação</text>
+</svg>
