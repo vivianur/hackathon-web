@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" role="img" aria-label="Ilustração de DevOps">
+  <defs>
+    <linearGradient id="gdev" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1f2937" />
+      <stop offset="100%" stop-color="#4b5563" />
+    </linearGradient>
+  </defs>
+  <rect width="900" height="600" rx="32" fill="url(#gdev)" />
+  <path d="M260 300c0-55 45-100 100-100h60l40 60-40 60h-60c-55 0-100-45-100-100z" fill="rgba(255,255,255,0.22)" />
+  <path d="M640 300c0 55-45 100-100 100h-60l-40-60 40-60h60c55 0 100 45 100 100z" fill="rgba(255,255,255,0.18)" />
+  <text x="50%" y="82%" text-anchor="middle" fill="#fff" font-family="'Segoe UI', Arial, sans-serif" font-size="60" font-weight="700">DevOps</text>
+</svg>
