@@ -22,6 +22,7 @@ import {
   Add,
   ExpandMore,
   ExpandLess,
+  Edit,
 } from '@mui/icons-material';
 import { useState } from 'react';
 import type { Task } from '../domain/entities/Task';
@@ -32,9 +33,10 @@ import { useThemeStore } from '../store/themeStore';
 
 interface TaskCardProps {
   task: Task;
+  onEdit?: (task: Task) => void;
 }
 
-export default function TaskCard({ task }: TaskCardProps) {
+export default function TaskCard({ task, onEdit }: TaskCardProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showSubtasks, setShowSubtasks] = useState(false);
   const [newSubtask, setNewSubtask] = useState('');
@@ -53,6 +55,13 @@ export default function TaskCard({ task }: TaskCardProps) {
 
   const handleDelete = () => {
     deleteTask(task.id);
+    handleMenuClose();
+  };
+
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit(task);
+    }
     handleMenuClose();
   };
 
@@ -205,6 +214,9 @@ export default function TaskCard({ task }: TaskCardProps) {
         </Collapse>
 
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+          <MenuItem onClick={handleEdit}>
+            <Edit sx={{ mr: 1 }} /> Editar
+          </MenuItem>
           {task.status !== 'todo' && (
             <MenuItem onClick={() => handleStatusChange('todo')}>
               Mover para: A Fazer
