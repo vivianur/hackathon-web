@@ -12,21 +12,44 @@ import {
   MenuItem,
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTaskStore } from '../store/taskStore';
-import type { TaskPriority, TaskStatus } from '../domain/entities/Task';
+import type { Task, TaskPriority, TaskStatus } from '../domain/entities/Task';
 
-export default function TaskDialog() {
+interface TaskDialogProps {
+  editTask?: Task | null;
+  onClose?: () => void;
+}
+
+export default function TaskDialog({ editTask, onClose }: TaskDialogProps) {
   const [open, setOpen] = useState(false);
-  const { addTask } = useTaskStore();
+  const { addTask, updateTask } = useTaskStore();
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     status: 'todo' as TaskStatus,
     priority: 'medium' as TaskPriority,
     estimatedTime: 25,
+    startDate: undefined as Date | undefined,
+    dueDate: undefined as Date | undefined,
     tags: [] as string[],
   });
+
+  useEffect(() => {
+    if (editTask) {
+      setFormData({
+        title: editTask.title,
+        description: editTask.description,
+        status: editTask.status,
+        priority: editTask.priority,
+        estimatedTime: editTask.estimatedTime || 25,
+        startDate: editTask.startDate ? new Date(editTask.startDate) : undefined,
+        dueDate: editTask.dueDate ? new Date(editTask.dueDate) : undefined,
+        tags: editTask.tags,
+      });
+      setOpen(true);
+    }
+  }, [editTask]);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => {
@@ -37,17 +60,24 @@ export default function TaskDialog() {
       status: 'todo',
       priority: 'medium',
       estimatedTime: 25,
+      startDate: undefined,
+      dueDate: undefined,
       tags: [],
     });
+    if (onClose) onClose();
   };
 
   const handleSubmit = () => {
     if (!formData.title.trim()) return;
 
-    addTask({
-      ...formData,
-      tags: formData.tags,
-    });
+    if (editTask) {
+      updateTask(editTask.id, formData);
+    } else {
+      addTask({
+        ...formData,
+        tags: formData.tags,
+      });
+    }
     handleClose();
   };
 
@@ -63,7 +93,7 @@ export default function TaskDialog() {
       </Button>
 
       <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-        <DialogTitle>Criar Nova Tarefa</DialogTitle>
+        <DialogTitle>{editTask ? 'Editar Tarefa' : 'Criar Nova Tarefa'}</DialogTitle>
         <DialogContent>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 1 }}>
             <TextField
@@ -100,12 +130,28 @@ export default function TaskDialog() {
               value={formData.estimatedTime}
               onChange={(e) => setFormData({ ...formData, estimatedTime: parseInt(e.target.value) || 0 })}
             />
+            <TextField
+              label="Data Prevista de Início"
+              type="date"
+              fullWidth
+              value={formData.startDate ? formData.startDate.toISOString().split('T')[0] : ''}
+              onChange={(e) => setFormData({ ...formData, startDate: e.target.value ? new Date(e.target.value) : undefined })}
+              InputLabelProps={{ shrink: true }}
+            />
+            <TextField
+              label="Data Prevista de Término"
+              type="date"
+              fullWidth
+              value={formData.dueDate ? formData.dueDate.toISOString().split('T')[0] : ''}
+              onChange={(e) => setFormData({ ...formData, dueDate: e.target.value ? new Date(e.target.value) : undefined })}
+              InputLabelProps={{ shrink: true }}
+            />
           </Box>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancelar</Button>
           <Button onClick={handleSubmit} variant="contained">
-            Criar
+            {editTask ? 'Salvar' : 'Criar'}
           </Button>
         </DialogActions>
       </Dialog>

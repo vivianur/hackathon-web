@@ -41,9 +41,23 @@ export const useTaskStore = create<TaskStore>()(
         })),
       updateTaskStatus: (id, status) =>
         set((state) => ({
-          tasks: state.tasks.map((task) =>
-            task.id === id ? { ...task, status } : task
-          ),
+          tasks: state.tasks.map((task) => {
+            if (task.id !== id) return task;
+            
+            const updates: Partial<Task> = { status };
+            
+            // Se mover para "em progresso" e não tiver data de início, adiciona data atual
+            if (status === 'in-progress' && !task.startDate) {
+              updates.startDate = new Date();
+            }
+            
+            // Se mover para "concluída" e não tiver data de término, adiciona data atual
+            if (status === 'done' && !task.dueDate) {
+              updates.dueDate = new Date();
+            }
+            
+            return { ...task, ...updates };
+          }),
         })),
       addSubtask: (taskId, title) =>
         set((state) => ({
