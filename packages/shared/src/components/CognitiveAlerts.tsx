@@ -3,10 +3,12 @@ import { Info, EmojiEvents, Warning } from '@mui/icons-material';
 import { useEffect, useState } from 'react';
 import { useAccessibilityStore } from '../stores/accessibilityStore';
 import { usePomodoroStore } from '../stores/pomodoroStore';
+import { useThemeStore } from '../stores/themeStore';
 
 export default function CognitiveAlerts() {
-  const { cognitiveAlerts } = useAccessibilityStore();
+  const { cognitiveAlerts, detailedMode } = useAccessibilityStore();
   const { isActive, currentPhase, sessionCount } = usePomodoroStore();
+  const mode = useThemeStore((state) => state.mode);
   const [alert, setAlert] = useState<{ type: 'info' | 'warning' | 'success', message: string } | null>(null);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ export default function CognitiveAlerts() {
     if (sessionCount > 0 && sessionCount % 4 === 0) {
       setAlert({
         type: 'success',
-        message: `Parabéns! Você completou ${sessionCount} sessões de foco!`
+        message: `Parabéns! Você completou ${sessionCount} sessões de foco! 🎉`
       });
     }
 
@@ -58,7 +60,17 @@ export default function CognitiveAlerts() {
         onClose={handleClose}
         severity={alert.type}
         icon={getIcon()}
-        sx={{ width: '100%', fontSize: '1.1rem' }}
+        sx={{
+          width: '100%',
+          fontSize: '1.1rem',
+          ...(detailedMode && {
+            bgcolor: mode === 'light' ? '#e0e0e0' : '#424242',
+            color: 'text.primary',
+            '& .MuiAlert-icon': {
+              color: mode === 'light' ? '#555555' : '#aaaaaa',
+            },
+          }),
+        }}
         action={
           <Button color="inherit" size="small" onClick={handleClose}>
             OK

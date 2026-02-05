@@ -28,7 +28,7 @@ import {
 } from '@mui/icons-material';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { useThemeStore } from '@mindease/shared';
+import { useThemeStore, useAnimations } from '@mindease/shared';
 
 const menuItems = [
   { title: 'Home', path: '/', icon: <Home /> },
@@ -45,6 +45,7 @@ export default function Navbar() {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
   const { mode, toggleTheme } = useThemeStore();
+  const animations = useAnimations();
 
   const toggleDrawer = (open: boolean) => () => {
     setDrawerOpen(open);
@@ -64,6 +65,44 @@ export default function Navbar() {
               component={Link}
               to={item.path}
               selected={location.pathname === item.path}
+              sx={{
+                transition: 'all 0.25s ease',
+                ...(animations.shouldAnimate && {
+                  '&:hover': {
+                    backgroundColor: (theme) => theme.palette.action.hover,
+                  },
+                }),
+                ...(animations.level === 'detailed' && animations.shouldAnimate && {
+                  '&:hover': {
+                    backgroundColor: (theme) =>
+                      theme.palette.mode === 'light'
+                        ? '#ff00d0'
+                        : 'transparent',
+                    backgroundImage: (theme) =>
+                      theme.palette.mode === 'light'
+                        ? 'none'
+                        : `linear-gradient(90deg, ${theme.palette.primary.main}22, transparent)`,
+                    boxShadow: (theme) =>
+                      theme.palette.mode === 'light'
+                        ? `0 0 0 2px rgba(255, 255, 255, 0.9), inset 4px 0 0 0 ${theme.palette.primary.main}`
+                        : `inset 3px 0 0 0 ${theme.palette.primary.main}`,
+                    transform: 'translateX(3px)',
+                  },
+                  '& .MuiListItemIcon-root': {
+                    transition: 'color 0.25s ease, transform 0.25s ease',
+                  },
+                  '& .MuiListItemText-primary': {
+                    transition: 'color 0.25s ease',
+                  },
+                  '&:hover .MuiListItemIcon-root': {
+                    color: 'primary.main',
+                    transform: 'translateX(2px)',
+                  },
+                  '&:hover .MuiListItemText-primary': {
+                    color: 'primary.main',
+                  },
+                }),
+              }}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.title} />
@@ -90,7 +129,7 @@ export default function Navbar() {
             </IconButton>
           )}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            MindEase
+            Hackathon FIAP
           </Typography>
           {!isMobile && (
             <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
@@ -103,13 +142,89 @@ export default function Navbar() {
                   startIcon={item.icon}
                   sx={{
                     backgroundColor: location.pathname === item.path ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+                    transition: 'all 0.2s ease',
+                    ...(animations.shouldAnimate && {
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.18)',
+                        transform: 'translateY(-2px)',
+                      },
+                    }),
+                    ...(animations.level === 'detailed' && animations.shouldAnimate && {
+                      '&:hover': {
+                        backgroundColor: (theme) =>
+                          theme.palette.mode === 'light'
+                            ? '#ff00d0'
+                            : 'transparent',
+                        backgroundImage: (theme) =>
+                          theme.palette.mode === 'light'
+                            ? 'none'
+                            : `linear-gradient(0deg, rgba(255,255,255,0.18), rgba(255,255,255,0.18)), linear-gradient(0deg, ${theme.palette.primary.main}20, ${theme.palette.primary.main}20)`,
+                        boxShadow: (theme) =>
+                          theme.palette.mode === 'light'
+                            ? `0 0 0 2px rgba(255, 255, 255, 1), 0 0 0 5px ${theme.palette.primary.main}, 0 10px 24px rgba(0,0,0,0.15)`
+                            : `0 0 0 2px ${theme.palette.primary.main}55, 0 10px 24px rgba(0,0,0,0.25)`,
+                        filter: 'saturate(1.15)',
+                        transform: 'translateY(-3px) scale(1.02)',
+                      },
+                      '&:focus-visible': {
+                        outline: 'none',
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}77, 0 0 0 4px rgba(255,255,255,0.3)`,
+                      },
+                      '& .MuiButton-startIcon': {
+                        transition: 'transform 0.25s ease, filter 0.25s ease, color 0.25s ease',
+                      },
+                      '&:hover .MuiButton-startIcon': {
+                        transform: 'translateX(2px)',
+                        filter: 'drop-shadow(0 0 4px rgba(255,255,255,0.35))',
+                        color: (theme) =>
+                          theme.palette.mode === 'light'
+                            ? 'rgba(255, 255, 255, 0.95)'
+                            : 'primary.main',
+                      },
+                    }),
                   }}
                 >
                   {item.title}
                 </Button>
               ))}
               <Tooltip title={mode === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}>
-                <IconButton onClick={toggleTheme} color="inherit" sx={{ ml: 1 }}>
+                <IconButton
+                  onClick={toggleTheme}
+                  color="inherit"
+                  sx={{
+                    ml: 1,
+                    transition: 'transform 0.25s ease',
+                    ...(animations.shouldAnimate && {
+                      '&:hover': {
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.action.hover}`,
+                      },
+                      '&:hover svg': {
+                        transform: 'rotate(12deg)',
+                      },
+                    }),
+                    ...(animations.level === 'detailed' && animations.shouldAnimate && {
+                      '&:hover': {
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}55`,
+                      },
+                      '&:hover svg': {
+                        transform: 'rotate(22deg) scale(1.08)',
+                        filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.38))',
+                      },
+                      '&:active svg': {
+                        animation: 'spinOnce 0.55s ease',
+                      },
+                      '@keyframes spinOnce': {
+                        '0%': { transform: 'rotate(0deg)' },
+                        '100%': { transform: 'rotate(360deg)' },
+                      },
+                      '&:focus-visible': {
+                        outline: 'none',
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}77, 0 0 0 4px rgba(255,255,255,0.3)`,
+                        borderRadius: '50%',
+                      },
+                    }),
+                  }}
+                >
                   {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
                 </IconButton>
               </Tooltip>
@@ -117,7 +232,42 @@ export default function Navbar() {
           )}
           {isMobile && (
             <Tooltip title={mode === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}>
-              <IconButton onClick={toggleTheme} color="inherit">
+              <IconButton
+                onClick={toggleTheme}
+                color="inherit"
+                sx={{
+                  transition: 'transform 0.25s ease',
+                  ...(animations.shouldAnimate && {
+                    '&:hover': {
+                      boxShadow: (theme) => `0 0 0 2px ${theme.palette.action.hover}`,
+                    },
+                    '&:hover svg': {
+                      transform: 'rotate(12deg)',
+                    },
+                  }),
+                  ...(animations.level === 'detailed' && animations.shouldAnimate && {
+                    '&:hover': {
+                      boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}55`,
+                    },
+                    '&:hover svg': {
+                      transform: 'rotate(22deg) scale(1.08)',
+                      filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.38))',
+                    },
+                    '&:active svg': {
+                      animation: 'spinOnce 0.55s ease',
+                    },
+                    '@keyframes spinOnce': {
+                      '0%': { transform: 'rotate(0deg)' },
+                      '100%': { transform: 'rotate(360deg)' },
+                    },
+                    '&:focus-visible': {
+                      outline: 'none',
+                      boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}77, 0 0 0 4px rgba(255,255,255,0.3)`,
+                      borderRadius: '50%',
+                    },
+                  }),
+                }}
+              >
                 {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
               </IconButton>
             </Tooltip>

@@ -2,7 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import Navbar from './components/Navbar';
-import { CognitiveAlerts } from '@mindease/shared';
+import { CognitiveAlerts, VLibrasWidget } from '@mindease/shared';
 import Home from './pages/Home';
 
 // Lazy load remote modules
@@ -47,6 +47,7 @@ function App() {
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <Navbar />
       <CognitiveAlerts />
+      <VLibrasWidget />
       <Box component="main" sx={{ flexGrow: 1, bgcolor: 'background.default' }}>
         <Routes>
           <Route path="/" element={<Home />} />

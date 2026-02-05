@@ -2,7 +2,7 @@ import { Container, Typography, Box, Paper, Chip, ToggleButtonGroup, ToggleButto
 import Grid from '@mui/material/Grid';
 import { ViewKanban, ViewList } from '@mui/icons-material';
 import { useState } from 'react';
-import { AccessibleContainer, useTaskStore } from '@mindease/shared';
+import { AccessibleContainer, useTaskStore, useAccessibilityStore, useThemeStore, useSpacing } from '@mindease/shared';
 import type { TaskStatus } from '@mindease/shared';
 import TaskDialog from './components/TaskDialog';
 import TaskCard from './components/TaskCard';
@@ -11,11 +11,23 @@ import PomodoroTimer from './components/PomodoroTimer';
 export default function Tarefas() {
   const [view, setView] = useState<'kanban' | 'list'>('kanban');
   const tasks = useTaskStore((state) => state.tasks);
+  const spacing = useSpacing();
+  const detailedMode = useAccessibilityStore((state) => state.detailedMode);
+  const mode = useThemeStore((state) => state.mode);
+
+  const getColumnColor = (originalColor: string) => {
+    if (!detailedMode) return originalColor;
+    // Modo monocromático: usar tons de cinza
+    if (originalColor === '#ed6c02') return mode === 'light' ? '#666666' : '#888888'; // todo
+    if (originalColor === '#0288d1') return mode === 'light' ? '#555555' : '#999999'; // in-progress
+    if (originalColor === '#2e7d32') return mode === 'light' ? '#444444' : '#aaaaaa'; // done
+    return originalColor;
+  };
 
   const columns: { status: TaskStatus; title: string; color: string }[] = [
-    { status: 'todo', title: 'A Fazer', color: '#ed6c02' },
-    { status: 'in-progress', title: 'Em Progresso', color: '#0288d1' },
-    { status: 'done', title: 'Concluído', color: '#2e7d32' },
+    { status: 'todo', title: 'A Fazer', color: getColumnColor('#ed6c02') },
+    { status: 'in-progress', title: 'Em Progresso', color: getColumnColor('#0288d1') },
+    { status: 'done', title: 'Concluído', color: getColumnColor('#2e7d32') },
   ];
 
   const getTasksByStatus = (status: TaskStatus) => {
@@ -24,7 +36,7 @@ export default function Tarefas() {
 
   return (
     <AccessibleContainer>
-      <Container maxWidth="xl" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="xl" sx={{ pt: 4, pb: 4 }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4, flexWrap: 'wrap', gap: 2 }}>
           <Box>
             <Typography variant="h3" component="h1" gutterBottom>
@@ -55,7 +67,7 @@ export default function Tarefas() {
         <PomodoroTimer />
 
         {view === 'kanban' ? (
-          <Grid container spacing={3}>
+          <Grid container spacing={spacing.gridSpacing}>
             {columns.map((column) => {
               const columnTasks = getTasksByStatus(column.status);
               return (
@@ -122,9 +134,15 @@ export default function Tarefas() {
         )}
 
         <Box sx={{ mt: 4 }}>
-          <Paper sx={{ p: 3, bgcolor: 'info.main', color: 'white' }}>
+          <Paper sx={{
+            p: 3,
+            bgcolor: detailedMode
+              ? (mode === 'light' ? '#666666' : '#888888')
+              : 'info.main',
+            color: 'white'
+          }}>
             <Typography variant="h6" gutterBottom>
-              Dicas para Melhor Produtividade
+              💡 Dicas para Melhor Produtividade
             </Typography>
             <ul>
               <li>Divida tarefas grandes em subtarefas menores</li>

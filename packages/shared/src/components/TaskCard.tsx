@@ -27,6 +27,8 @@ import { useState } from "react";
 import type { Task } from "../domain/entities/Task";
 import { useTaskStore } from "../stores/taskStore";
 import { usePomodoroStore } from "../stores/pomodoroStore";
+import { useAccessibilityStore } from "../stores/accessibilityStore";
+import { useThemeStore } from "../stores/themeStore";
 
 interface TaskCardProps {
 	task: Task;
@@ -44,6 +46,8 @@ export default function TaskCard({ task }: TaskCardProps) {
 		deleteSubtask,
 	} = useTaskStore();
 	const { startFocus } = usePomodoroStore();
+	const detailedMode = useAccessibilityStore((state) => state.detailedMode);
+	const mode = useThemeStore((state) => state.mode);
 
 	const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -164,7 +168,14 @@ export default function TaskCard({ task }: TaskCardProps) {
 						<LinearProgress
 							variant="determinate"
 							value={progress}
-							sx={{ mb: 2 }}
+							sx={{
+								mb: 2,
+								...(detailedMode && {
+									'& .MuiLinearProgress-bar': {
+										backgroundColor: mode === 'light' ? '#666666' : '#aaaaaa',
+									},
+								}),
+							}}
 						/>
 					</>
 				)}

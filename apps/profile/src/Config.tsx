@@ -1,19 +1,24 @@
-import { Container, Typography, Box, Switch, FormControlLabel, Divider, Button, Alert } from '@mui/material';
-import { RestartAlt, Notifications, VolumeUp, EmojiEvents, WarningAmber } from '@mui/icons-material';
+import { Container, Typography, Box, Switch, FormControlLabel, Button, Alert } from '@mui/material';
+import { RestartAlt, Notifications, VolumeUp, EmojiEvents, Undo } from '@mui/icons-material';
 import {
   AccessibleContainer,
   FocusCard,
+  ThemedAlert,
   useProfileStore,
-  useAccessibilityStore
+  useAccessibilityStore,
+  useThemeStore,
+  useAnimations
 } from '@mindease/shared';
 
 export default function Config() {
   const { profile, updatePreferences } = useProfileStore();
   const { resetToDefaults } = useAccessibilityStore();
+  const { resetToDefault: resetTheme } = useThemeStore();
+  const animations = useAnimations();
 
   if (!profile) {
     return (
-      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+      <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
         <Alert severity="info">
           Carregando configurações...
         </Alert>
@@ -26,6 +31,7 @@ export default function Config() {
   const handleReset = () => {
     if (window.confirm('Tem certeza que deseja restaurar todas as configurações para os valores padrão?')) {
       resetToDefaults();
+      resetTheme();
       updatePreferences({
         notifications: true,
         soundEffects: true,
@@ -37,19 +43,19 @@ export default function Config() {
 
   return (
     <AccessibleContainer>
-      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom>
+      <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
+        <Typography variant="h3" component="h1" gutterBottom sx={animations.fadeIn}>
           Configurações
         </Typography>
         <Typography variant="h6" color="text.secondary" paragraph>
           Ajuste preferências de notificações e comportamento do sistema
         </Typography>
 
-        <Alert severity="warning" sx={{ mb: 3 }}>
+        <ThemedAlert severity="warning" sx={{ mb: 3 }}>
           As configurações de acessibilidade estão disponíveis no Painel Cognitivo
-        </Alert>
+        </ThemedAlert>
 
-        <FocusCard title="Notificações" icon={<Notifications color="primary" />} defaultExpanded>
+        <FocusCard title="Notificações" icon={<Notifications color="primary" />}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 2 }}>
             <FormControlLabel
               control={
@@ -132,16 +138,14 @@ export default function Config() {
           </Box>
         </FocusCard>
 
-        <Divider sx={{ my: 4 }} />
-
-        <FocusCard title="Restaurar Padrões" icon={<WarningAmber color="warning" />}>
-          <Alert severity="warning" sx={{ mb: 2 }}>
+        <FocusCard title="Restaurar Padrões" icon={<Undo color="primary" />}>
+          <ThemedAlert severity="warning" sx={{ mb: 2, pl: 1 }}>
             Esta ação irá restaurar todas as configurações de acessibilidade e preferências
             para os valores padrão.
-          </Alert>
+          </ThemedAlert>
           <Button
             variant="outlined"
-            color="warning"
+            color="primary"
             startIcon={<RestartAlt />}
             onClick={handleReset}
             fullWidth
@@ -150,8 +154,8 @@ export default function Config() {
           </Button>
         </FocusCard>
 
-        <Box sx={{ mt: 4 }}>
-          <Alert severity="info">
+        <Box sx={{ mt: 3 }}>
+          <ThemedAlert severity="info">
             <Typography variant="body2" fontWeight="medium" gutterBottom>
               Dica: Configurações Salvas Automaticamente
             </Typography>
@@ -159,7 +163,7 @@ export default function Config() {
               Todas as suas configurações são salvas automaticamente no seu navegador.
               Suas preferências persistem mesmo após fechar e reabrir a aplicação.
             </Typography>
-          </Alert>
+          </ThemedAlert>
         </Box>
       </Container>
     </AccessibleContainer>

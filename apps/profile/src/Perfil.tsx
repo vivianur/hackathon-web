@@ -1,16 +1,25 @@
-import { Container, Typography, Box, Paper, Avatar, TextField, Button, Chip, FormControl, InputLabel, Select, MenuItem, Alert } from '@mui/material';
+import { Container, Typography, Box, Paper, Avatar, TextField, Button, Chip, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import { Person, Psychology, AccessTime, LocalCafe } from '@mui/icons-material';
 import { useState, useEffect } from 'react';
 import {
   AccessibleContainer,
   FocusCard,
-  useProfileStore
+  ThemedAlert,
+  useProfileStore,
+  useAnimations,
+  useSpacing,
+  useAccessibilityStore,
+  useThemeStore
 } from '@mindease/shared';
 
 export default function Perfil() {
   const { profile, setProfile, updateProfile, updateStudyRoutine, addNeurodivergence, removeNeurodivergence } = useProfileStore();
   const [isEditing, setIsEditing] = useState(false);
+  const animations = useAnimations();
+  const spacing = useSpacing();
+  const detailedMode = useAccessibilityStore((state) => state.detailedMode);
+  const mode = useThemeStore((state) => state.mode);
 
   useEffect(() => {
     // Criar perfil inicial se não existir
@@ -54,17 +63,31 @@ export default function Perfil() {
 
   return (
     <AccessibleContainer>
-      <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
-        <Typography variant="h3" component="h1" gutterBottom>
+      <Container maxWidth="md" sx={{ pt: 4, pb: 4 }}>
+        <Typography variant="h3" component="h1" gutterBottom sx={animations.fadeIn}>
           Perfil do Usuário
         </Typography>
         <Typography variant="h6" color="text.secondary" paragraph>
           Gerencie suas informações e preferências pessoais
         </Typography>
 
-        <Paper sx={{ p: 4, mt: 3, mb: 3 }}>
+        <Paper sx={{ p: 4, mt: 3, mb: 3, ...animations.slideUp }}>
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', mb: 4 }}>
-            <Avatar sx={{ width: 100, height: 100, mb: 2, bgcolor: 'primary.main' }}>
+            <Avatar sx={{
+              width: 100,
+              height: 100,
+              mb: 2,
+              bgcolor: detailedMode
+                ? (mode === 'light' ? '#666666' : '#999999')
+                : 'primary.main',
+              ...(animations.level === 'detailed' && {
+                animation: 'pulse 2s ease-in-out infinite',
+                '@keyframes pulse': {
+                  '0%, 100%': { transform: 'scale(1)' },
+                  '50%': { transform: 'scale(1.05)' },
+                },
+              }),
+            }}>
               <Person sx={{ fontSize: 60 }} />
             </Avatar>
             <Typography variant="h5">{profile.name}</Typography>
@@ -73,7 +96,7 @@ export default function Perfil() {
             </Typography>
           </Box>
 
-          <Grid container spacing={3}>
+          <Grid container spacing={spacing.gridSpacing}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <TextField
                 fullWidth
@@ -116,10 +139,10 @@ export default function Perfil() {
           </Grid>
         </Paper>
 
-        <FocusCard title="Neurodivergências" icon={<Psychology color="primary" />} defaultExpanded>
-          <Alert severity="info" sx={{ mb: 2 }}>
+        <FocusCard title="Neurodivergências" icon={<Psychology color="primary" />}>
+          <ThemedAlert severity="info" sx={{ mb: 3, pl: 1 }}>
             Identifique suas necessidades para que possamos personalizar melhor sua experiência.
-          </Alert>
+          </ThemedAlert>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mb: 2 }}>
             {neurodivergenceOptions.map((option) => {
               const isSelected = profile.neurodivergence?.includes(option);
@@ -149,7 +172,7 @@ export default function Perfil() {
         </FocusCard>
 
         <FocusCard title="Rotina de Estudo" icon={<AccessTime color="primary" />}>
-          <Grid container spacing={3}>
+          <Grid container spacing={spacing.gridSpacing}>
             <Grid size={{ xs: 12, sm: 6 }}>
               <FormControl fullWidth>
                 <InputLabel>Período Preferido</InputLabel>
@@ -158,11 +181,9 @@ export default function Perfil() {
                   label="Período Preferido"
                   onChange={(e) =>
                     updateStudyRoutine({
-                      preferredStudyTime: e.target.value as 'morning' | 'afternoon' | 'evening' | 'night',
-                      sessionDuration: profile.studyRoutine?.sessionDuration || 25,
-                      breakDuration: profile.studyRoutine?.breakDuration || 5,
-                      focusTechnique: profile.studyRoutine?.focusTechnique || 'pomodoro',
-                    })
+                      ...profile.studyRoutine,
+                      preferredStudyTime: e.target.value as any,
+                    } as any)
                   }
                 >
                   <MenuItem value="morning">Manhã</MenuItem>
@@ -180,11 +201,9 @@ export default function Perfil() {
                   label="Técnica de Foco"
                   onChange={(e) =>
                     updateStudyRoutine({
-                      preferredStudyTime: profile.studyRoutine?.preferredStudyTime || 'morning',
-                      sessionDuration: profile.studyRoutine?.sessionDuration || 25,
-                      breakDuration: profile.studyRoutine?.breakDuration || 5,
-                      focusTechnique: e.target.value as 'pomodoro' | 'custom' | 'flexible',
-                    })
+                      ...profile.studyRoutine,
+                      focusTechnique: e.target.value as any,
+                    } as any)
                   }
                 >
                   <MenuItem value="pomodoro">Pomodoro (25min)</MenuItem>
@@ -201,11 +220,9 @@ export default function Perfil() {
                 value={profile.studyRoutine?.sessionDuration || 25}
                 onChange={(e) =>
                   updateStudyRoutine({
-                    preferredStudyTime: profile.studyRoutine?.preferredStudyTime || 'morning',
+                    ...profile.studyRoutine,
                     sessionDuration: parseInt(e.target.value) || 25,
-                    breakDuration: profile.studyRoutine?.breakDuration || 5,
-                    focusTechnique: profile.studyRoutine?.focusTechnique || 'pomodoro',
-                  })
+                  } as any)
                 }
               />
             </Grid>
@@ -217,18 +234,23 @@ export default function Perfil() {
                 value={profile.studyRoutine?.breakDuration || 5}
                 onChange={(e) =>
                   updateStudyRoutine({
-                    preferredStudyTime: profile.studyRoutine?.preferredStudyTime || 'morning',
-                    sessionDuration: profile.studyRoutine?.sessionDuration || 25,
+                    ...profile.studyRoutine,
                     breakDuration: parseInt(e.target.value) || 5,
-                    focusTechnique: profile.studyRoutine?.focusTechnique || 'pomodoro',
-                  })
+                  } as any)
                 }
               />
             </Grid>
           </Grid>
         </FocusCard>
 
-        <Paper sx={{ p: 3, mt: 3, bgcolor: 'success.main', color: 'white' }}>
+        <Paper sx={{
+          p: 3,
+          mt: 3,
+          bgcolor: detailedMode
+            ? (mode === 'light' ? '#666666' : '#999999')
+            : 'primary.main',
+          color: 'white'
+        }}>
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <LocalCafe sx={{ fontSize: 40 }} />
             <Box>
