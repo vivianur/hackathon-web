@@ -58,7 +58,7 @@ export const usePomodoroStore = create<PomodoroStore>()(
           totalDuration: duration,
           startTime: now,
           pausedTime: undefined,
-          sessionCount: state.currentPhase === 'focus' ? state.sessionCount + 1 : state.sessionCount,
+          sessionCount: state.sessionCount,
         });
       },
       
@@ -103,13 +103,15 @@ export const usePomodoroStore = create<PomodoroStore>()(
         if (remaining > 0) {
           set({ timeRemaining: remaining });
         } else {
+          const shouldCountSession = state.currentPhase === 'focus';
           // Timer acabou
           set({ 
             isActive: false, 
             currentPhase: 'idle',
             timeRemaining: 0,
             startTime: undefined,
-            totalDuration: undefined
+            totalDuration: undefined,
+            sessionCount: shouldCountSession ? state.sessionCount + 1 : state.sessionCount,
           });
         }
       },

@@ -26,32 +26,32 @@ export default function ThemeProviderWrapper({ children }: { children: React.Rea
         palette: {
           mode,
           primary: {
-            main: detailedMode 
+            main: detailedMode
               ? (mode === 'light' ? '#333333' : '#cccccc')
               : (mode === 'light' ? '#be0078cc' : '#ff00d0'),
           },
           secondary: {
-            main: detailedMode 
+            main: detailedMode
               ? (mode === 'light' ? '#666666' : '#999999')
               : (mode === 'light' ? '#dc004e' : '#ff00d0'),
           },
           error: {
-            main: detailedMode 
+            main: detailedMode
               ? (mode === 'light' ? '#444444' : '#aaaaaa')
               : (mode === 'light' ? '#d32f2f' : '#f44336'),
           },
           warning: {
-            main: detailedMode 
+            main: detailedMode
               ? (mode === 'light' ? '#555555' : '#999999')
               : (mode === 'light' ? '#f57c00' : '#ff9800'),
           },
           info: {
-            main: detailedMode 
+            main: detailedMode
               ? (mode === 'light' ? '#666666' : '#888888')
               : (mode === 'light' ? '#1976d2' : '#2196f3'),
           },
           success: {
-            main: detailedMode 
+            main: detailedMode
               ? (mode === 'light' ? '#333333' : '#aaaaaa')
               : (mode === 'light' ? '#388e3c' : '#4caf50'),
           },
@@ -62,11 +62,11 @@ export default function ThemeProviderWrapper({ children }: { children: React.Rea
         },
         typography: {
           fontSize: 14 * fontSizeMultiplier,
-          h1: { fontSize: `${2.3 * fontSizeMultiplier}rem` },
-          h2: { fontSize: `${2 * fontSizeMultiplier}rem` },
-          h3: { fontSize: `${1.75 * fontSizeMultiplier}rem` },
-          h4: { fontSize: `${1.5 * fontSizeMultiplier}rem` },
-          h5: { fontSize: `${1.25 * fontSizeMultiplier}rem` },
+          h1: { fontSize: `${2 * fontSizeMultiplier}rem` },
+          h2: { fontSize: `${1.75 * fontSizeMultiplier}rem` },
+          h3: { fontSize: `${1.5 * fontSizeMultiplier}rem` },
+          h4: { fontSize: `${1.3 * fontSizeMultiplier}rem` },
+          h5: { fontSize: `${1.15 * fontSizeMultiplier}rem` },
           h6: { fontSize: `${1 * fontSizeMultiplier}rem` },
           body1: { fontSize: `${1 * fontSizeMultiplier}rem` },
           body2: { fontSize: `${0.875 * fontSizeMultiplier}rem` },
@@ -90,8 +90,8 @@ export default function ThemeProviderWrapper({ children }: { children: React.Rea
             styleOverrides: {
               root: {
                 '&:not(.Mui-checked) .MuiSwitch-thumb': {
-                  boxShadow: mode === 'light' 
-                    ? '0 2px 8px rgba(0, 0, 0, 0.5)' 
+                  boxShadow: mode === 'light'
+                    ? '0 2px 8px rgba(0, 0, 0, 0.5)'
                     : 'none',
                 },
               },

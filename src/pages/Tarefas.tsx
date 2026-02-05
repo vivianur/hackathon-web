@@ -38,6 +38,11 @@ export default function Tarefas() {
     return tasks.filter((task) => task.status === status);
   };
 
+  const statusOrder: TaskStatus[] = ['todo', 'in-progress', 'done'];
+  const orderedTasks = [...tasks].sort(
+    (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
+  );
+
   return (
     <AccessibleContainer>
       <Container maxWidth="xl" sx={{ pt: 4, pb: 4 }}>
@@ -132,7 +137,7 @@ export default function Tarefas() {
                 </Typography>
               </Paper>
             ) : (
-              tasks.map((task) => <TaskCard key={task.id} task={task} onEdit={setEditingTask} />)
+              orderedTasks.map((task) => <TaskCard key={task.id} task={task} onEdit={setEditingTask} />)
             )}
           </Box>
         )}

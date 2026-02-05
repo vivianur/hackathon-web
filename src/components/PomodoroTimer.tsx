@@ -136,9 +136,6 @@ export default function PomodoroTimer() {
             </IconButton>
           )}
         </Box>
-        <Typography variant="body2" sx={{ mt: 2, opacity: 0.9 }}>
-          Sessões completadas: {pomodoro.sessionCount}
-        </Typography>
       </Box>
     </Paper>
   );
