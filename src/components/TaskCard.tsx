@@ -90,9 +90,38 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
     }
   };
 
+  const getStatusLabel = () => {
+    switch (task.status) {
+      case 'todo':
+        return 'A Fazer';
+      case 'in-progress':
+        return 'Em Progresso';
+      case 'done':
+        return 'Concluído';
+      default:
+        return 'Status';
+    }
+  };
+
+  const getStatusColor = () => {
+    if (detailedMode) {
+      return mode === 'light' ? '#666666' : '#888888';
+    }
+    switch (task.status) {
+      case 'todo':
+        return '#ed6c02';
+      case 'in-progress':
+        return '#0288d1';
+      case 'done':
+        return '#2e7d32';
+      default:
+        return '#9e9e9e';
+    }
+  };
+
   const completedSubtasks = task.subtasks.filter(s => s.completed).length;
-  const progress = task.subtasks.length > 0 
-    ? (completedSubtasks / task.subtasks.length) * 100 
+  const progress = task.subtasks.length > 0
+    ? (completedSubtasks / task.subtasks.length) * 100
     : 0;
 
   return (
@@ -111,6 +140,15 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
                 label={task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Média' : 'Baixa'}
                 color={getPriorityColor()}
                 size="small"
+              />
+              <Chip
+                label={getStatusLabel()}
+                size="small"
+                sx={{
+                  bgcolor: getStatusColor(),
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
               />
               {task.estimatedTime && (
                 <Chip
@@ -146,17 +184,17 @@ export default function TaskCard({ task, onEdit }: TaskCardProps) {
                 Progresso: {completedSubtasks}/{task.subtasks.length}
               </Typography>
             </Box>
-            <LinearProgress 
-              variant="determinate" 
-              value={progress} 
-              sx={{ 
+            <LinearProgress
+              variant="determinate"
+              value={progress}
+              sx={{
                 mb: 2,
                 ...(detailedMode && {
                   '& .MuiLinearProgress-bar': {
                     backgroundColor: mode === 'light' ? '#666666' : '#aaaaaa',
                   },
                 }),
-              }} 
+              }}
             />
           </>
         )}
