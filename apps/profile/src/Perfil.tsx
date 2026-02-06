@@ -15,6 +15,7 @@ import {
 import Grid from "@mui/material/Grid";
 import { Person, Psychology, AccessTime, LocalCafe } from "@mui/icons-material";
 import { useState, useEffect } from "react";
+import { keyframes } from "@emotion/react";
 import {
 	AccessibleContainer,
 	FocusCard,
@@ -25,6 +26,11 @@ import {
 	useAccessibilityStore,
 	useThemeStore,
 } from "@mindease/shared";
+
+const pulseKf = keyframes`
+	0%, 100% { transform: scale(1); }
+	50% { transform: scale(1.05); }
+`;
 
 export default function Perfil() {
 	const {
@@ -124,11 +130,7 @@ export default function Perfil() {
 										: "#999999"
 									: "primary.main",
 								...(animations.level === "detailed" && {
-									animation: "pulse 2s ease-in-out infinite",
-									"@keyframes pulse": {
-										"0%, 100%": { transform: "scale(1)" },
-										"50%": { transform: "scale(1.05)" },
-									},
+									animation: `${pulseKf} 2s ease-in-out infinite`,
 								}),
 							}}
 						>

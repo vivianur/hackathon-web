@@ -29,8 +29,14 @@ import {
 } from "@mui/icons-material";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { keyframes } from "@emotion/react";
 import { useThemeStore, useAnimations } from "@mindease/shared";
 import CalendarDialog from "./CalendarDialog";
+
+const spinOnceKf = keyframes`
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+`;
 
 const menuItems = [
 	{ title: "Home", path: "/", icon: <Home /> },
@@ -224,11 +230,7 @@ export default function Navbar() {
 													filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))",
 												},
 												"&:active svg": {
-													animation: "spinOnce 0.55s ease",
-												},
-												"@keyframes spinOnce": {
-													"0%": { transform: "rotate(0deg)" },
-													"100%": { transform: "rotate(360deg)" },
+													animation: `${spinOnceKf} 0.55s ease`,
 												},
 												"&:focus-visible": {
 													outline: "none",
@@ -273,11 +275,7 @@ export default function Navbar() {
 													filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))",
 												},
 												"&:active svg": {
-													animation: "spinOnce 0.55s ease",
-												},
-												"@keyframes spinOnce": {
-													"0%": { transform: "rotate(0deg)" },
-													"100%": { transform: "rotate(360deg)" },
+													animation: `${spinOnceKf} 0.55s ease`,
 												},
 												"&:focus-visible": {
 													outline: "none",
@@ -321,11 +319,7 @@ export default function Navbar() {
 													filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))",
 												},
 												"&:active svg": {
-													animation: "spinOnce 0.55s ease",
-												},
-												"@keyframes spinOnce": {
-													"0%": { transform: "rotate(0deg)" },
-													"100%": { transform: "rotate(360deg)" },
+													animation: `${spinOnceKf} 0.55s ease`,
 												},
 												"&:focus-visible": {
 													outline: "none",
@@ -369,11 +363,7 @@ export default function Navbar() {
 													filter: "drop-shadow(0 0 6px rgba(255,255,255,0.38))",
 												},
 												"&:active svg": {
-													animation: "spinOnce 0.55s ease",
-												},
-												"@keyframes spinOnce": {
-													"0%": { transform: "rotate(0deg)" },
-													"100%": { transform: "rotate(360deg)" },
+													animation: `${spinOnceKf} 0.55s ease`,
 												},
 												"&:focus-visible": {
 													outline: "none",
