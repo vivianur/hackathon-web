@@ -9,10 +9,11 @@ import { useTaskStore } from '../store/taskStore';
 import { useSpacing } from '../hooks/useSpacing';
 import { useAccessibilityStore } from '../store/accessibilityStore';
 import { useThemeStore } from '../store/themeStore';
-import type { TaskStatus } from '../domain/entities/Task';
+import type { Task, TaskStatus } from '../domain/entities/Task';
 
 export default function Tarefas() {
   const [view, setView] = useState<'kanban' | 'list'>('kanban');
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
   const tasks = useTaskStore((state) => state.tasks);
   const spacing = useSpacing();
   const detailedMode = useAccessibilityStore((state) => state.detailedMode);
@@ -36,6 +37,11 @@ export default function Tarefas() {
   const getTasksByStatus = (status: TaskStatus) => {
     return tasks.filter((task) => task.status === status);
   };
+
+  const statusOrder: TaskStatus[] = ['todo', 'in-progress', 'done'];
+  const orderedTasks = [...tasks].sort(
+    (a, b) => statusOrder.indexOf(a.status) - statusOrder.indexOf(b.status)
+  );
 
   return (
     <AccessibleContainer>
@@ -63,7 +69,7 @@ export default function Tarefas() {
                 <ViewList sx={{ mr: 1 }} /> Lista
               </ToggleButton>
             </ToggleButtonGroup>
-            <TaskDialog />
+            <TaskDialog editTask={editingTask} onClose={() => setEditingTask(null)} />
           </Box>
         </Box>
 
@@ -110,7 +116,7 @@ export default function Tarefas() {
                         </Typography>
                       ) : (
                         columnTasks.map((task) => (
-                          <TaskCard key={task.id} task={task} />
+                          <TaskCard key={task.id} task={task} onEdit={setEditingTask} />
                         ))
                       )}
                     </Box>
@@ -131,7 +137,7 @@ export default function Tarefas() {
                 </Typography>
               </Paper>
             ) : (
-              tasks.map((task) => <TaskCard key={task.id} task={task} />)
+              orderedTasks.map((task) => <TaskCard key={task.id} task={task} onEdit={setEditingTask} />)
             )}
           </Box>
         )}

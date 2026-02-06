@@ -1,363 +1,246 @@
-# MindEase - Plataforma de Acessibilidade Cognitiva
+# MindEase - Plataforma de Acessibilidade Cognitiva 🧠
 
-> Facilitando a vida academica e profissional de pessoas neurodivergentes atraves de tecnologia inclusiva
+> Facilitando a vida acadêmica e profissional de pessoas neurodivergentes através de tecnologia inclusiva
 
-## Sobre o Projeto
+## 📋 Sobre o Projeto
 
-MindEase e uma plataforma desenvolvida para a **FIAP Inclusive** com foco em **acessibilidade cognitiva**, projetada especificamente para auxiliar pessoas com:
+MindEase é uma plataforma desenvolvida para a **FIAP Inclusive** com foco em **acessibilidade cognitiva**, projetada especificamente para auxiliar pessoas com:
 
-- TDAH (Transtorno do Deficit de Atencao com Hiperatividade)
+- TDAH (Transtorno do Déficit de Atenção com Hiperatividade)
 - TEA (Transtorno do Espectro Autista)
 - Dislexia
 - Burnout e sobrecarga mental
-- Dificuldades de foco e retencao
+- Dificuldades de foco e retenção
 - Ansiedade em ambientes digitais
 - Sobrecarga sensorial
 
-## Funcionalidades Principais
+## 🎯 Funcionalidades Principais
 
-### 1. Painel Cognitivo Personalizavel
-Dashboard completo onde o usuario pode ajustar:
-- Nivel de complexidade da interface (Simples/Moderado/Detalhado)
-- Modo de foco (esconde distracoes)
-- Modo resumo / modo detalhado
-- Contraste, espacamento e tamanho de fonte
-- Modo escuro/claro
-- Alertas cognitivos personalizados
-- Suporte VLibras
+### 1. Painel Cognitivo Personalizável
+Dashboard completo onde o usuário pode ajustar:
+- ✅ Nível de complexidade da interface (Simples/Moderado/Detalhado)
+- ✅ Modo de foco (esconde distrações)
+- ✅ Modo resumo / modo detalhado
+- ✅ Contraste, espaçamento e tamanho de fonte
+- ✅ Modo escuro/claro
+- ✅ Alertas cognitivos personalizados
+- ✅ Suporte VLibras
 
 ### 2. Organizador de Tarefas com Suporte Cognitivo
-Sistema completo de gestao de tarefas com:
-- Visualizacao Kanban simplificada (A Fazer / Em Progresso / Concluido)
-- Timer Pomodoro adaptavel
-- Checklist inteligente com subtarefas
-- Alertas de incentivo e progresso
-- Avisos de transicao suave entre atividades
-- Acompanhamento de tempo investido
+Sistema completo de gestão de tarefas com:
+- ✅ Visualização Kanban simplificada (A Fazer / Em Progresso / Concluído)
+- ✅ Timer Pomodoro adaptável
+- ✅ Checklist inteligente com subtarefas
+- ✅ Alertas de incentivo e progresso
+- ✅ Avisos de transição suave entre atividades
+- ✅ Acompanhamento de tempo investido
 
-### 3. Perfil do Usuario + Configuracoes Persistentes
-Armazenamento e gestao de:
-- Perfil pessoal e preferencias
-- Neurodivergencias identificadas
-- Rotina de estudo personalizada
-- Tecnicas de foco preferidas (Pomodoro/Custom/Flexivel)
-- Preferencias de notificacoes
-- Todas as configuracoes salvas no localStorage
+### 3. Perfil do Usuário + Configurações Persistentes
+Armazenamento e gestão de:
+- ✅ Perfil pessoal e preferências
+- ✅ Neurodivergências identificadas
+- ✅ Rotina de estudo personalizada
+- ✅ Técnicas de foco preferidas (Pomodoro/Custom/Flexível)
+- ✅ Preferências de notificações
+- ✅ Todas as configurações salvas no localStorage
 
----
-
-## Arquitetura
-
-### Microfrontend com Module Federation
-
-O projeto utiliza **Module Federation** (`@originjs/vite-plugin-federation`) para dividir a aplicacao em microfrontends independentes:
-
-```
-+------------------------------------------------------------------+
-|                          BROWSER                                  |
-|                    http://localhost:3000                          |
-+------------------------------------------------------------------+
-                              |
-                              v
-+------------------------------------------------------------------+
-|                      SHELL (Host)                                 |
-|  - React Router (navegacao)                                       |
-|  - Layout principal (Navbar)                                      |
-|  - Carrega remotes via Module Federation                          |
-|  - Porta: 3000 (Docker) / 5000 (local)                           |
-+------------------------------------------------------------------+
-         |                    |                    |
-         v                    v                    v
-+----------------+   +----------------+   +----------------+
-|   DASHBOARD    |   |     TASKS      |   |    PROFILE     |
-|   (Remote)     |   |    (Remote)    |   |    (Remote)    |
-|                |   |                |   |                |
-| Exposes:       |   | Exposes:       |   | Exposes:       |
-| - Painel.tsx   |   | - Tarefas.tsx  |   | - Perfil.tsx   |
-| - Explore.tsx  |   |                |   | - Config.tsx   |
-|                |   |                |   |                |
-| Porta: 5001    |   | Porta: 5002    |   | Porta: 5003    |
-+----------------+   +----------------+   +----------------+
-```
-
-### Estrutura do Monorepo
-
-```
-hackathon-web/
-├── apps/
-│   ├── shell/                      # Host Application
-│   │   ├── src/
-│   │   │   ├── App.tsx             # Routes + lazy loading
-│   │   │   ├── main.tsx            # Entry point
-│   │   │   └── remotes.d.ts        # TypeScript declarations
-│   │   └── vite.config.ts          # Federation host config
-│   │
-│   ├── dashboard/                  # Remote: Painel + Explore
-│   │   ├── src/
-│   │   │   ├── Painel.tsx          # Dashboard principal
-│   │   │   └── Explore.tsx         # Pagina Explore
-│   │   └── vite.config.ts          # Federation remote config
-│   │
-│   ├── tasks/                      # Remote: Tarefas
-│   │   ├── src/
-│   │   │   └── Tarefas.tsx         # Kanban board
-│   │   └── vite.config.ts
-│   │
-│   └── profile/                    # Remote: Perfil + Config
-│       ├── src/
-│       │   ├── Perfil.tsx          # Pagina de perfil
-│       │   └── Config.tsx          # Configuracoes
-│       └── vite.config.ts
-│
-├── packages/
-│   └── shared/                     # Codigo Compartilhado
-│       ├── src/
-│       │   ├── components/         # Componentes reutilizaveis
-│       │   │   ├── AccessibleContainer.tsx
-│       │   │   ├── AnimatedCard.tsx
-│       │   │   ├── FocusCard.tsx
-│       │   │   ├── CognitiveAlerts.tsx
-│       │   │   ├── Navbar.tsx
-│       │   │   ├── TaskCard.tsx
-│       │   │   ├── TaskDialog.tsx
-│       │   │   └── PomodoroTimer.tsx
-│       │   ├── store/              # Zustand stores
-│       │   │   ├── accessibilityStore.ts
-│       │   │   ├── taskStore.ts
-│       │   │   ├── profileStore.ts
-│       │   │   ├── pomodoroStore.ts
-│       │   │   └── themeStore.ts
-│       │   ├── domain/             # Entidades de dominio
-│       │   │   └── entities/
-│       │   │       ├── AccessibilitySettings.ts
-│       │   │       ├── Task.ts
-│       │   │       ├── UserProfile.ts
-│       │   │       └── PomodoroSession.ts
-│       │   └── theme/
-│       │       └── ThemeProviderWrapper.tsx
-│       └── package.json
-│
-├── docker/
-│   ├── Dockerfile.shell            # Build do shell
-│   ├── Dockerfile.remote           # Build dos remotes
-│   └── nginx/
-│       ├── nginx.conf              # Proxy reverso + CORS
-│       └── remote.conf             # CORS para remotes
-│
-├── docker-compose.yml              # Config base
-├── docker-compose.dev.yml          # Override desenvolvimento
-└── docker-compose.prod.yml         # Override producao
-```
+## 🏗️ Arquitetura
 
 ### Clean Architecture
+O projeto segue os princípios de Clean Architecture com separação clara de responsabilidades:
 
-O codigo em `packages/shared` segue principios de Clean Architecture:
+```
+src/
+├── domain/               # Camada de domínio (entidades e tipos)
+│   └── entities/
+│       ├── AccessibilitySettings.ts
+│       ├── Task.ts
+│       ├── UserProfile.ts
+│       └── PomodoroSession.ts
+├── store/                # Estado global (Zustand)
+│   ├── accessibilityStore.ts
+│   ├── taskStore.ts
+│   ├── profileStore.ts
+│   ├── pomodoroStore.ts
+│   └── themeStore.ts
+├── components/           # Componentes reutilizáveis
+│   ├── AccessibleContainer.tsx
+│   ├── AnimatedCard.tsx
+│   ├── FocusCard.tsx
+│   ├── CognitiveAlerts.tsx
+│   ├── Navbar.tsx
+│   ├── TaskCard.tsx
+│   ├── TaskDialog.tsx
+│   └── PomodoroTimer.tsx
+├── pages/                # Páginas da aplicação
+│   ├── Home.tsx
+│   ├── Painel.tsx
+│   ├── Tarefas.tsx
+│   ├── Perfil.tsx
+│   ├── Config.tsx
+│   └── Plataforma.tsx
+└── theme/                # Tema e estilos
+    └── ThemeProviderWrapper.tsx
+```
 
-**1. Separacao de Concerns**
-- Entidades de dominio isoladas em `domain/entities`
-- Logica de estado em stores Zustand separados
-- Componentes UI reutilizaveis e independentes
+### Princípios Aplicados
 
-**2. Reutilizacao de Codigo**
-- Todos os componentes sao preparados para serem portados para React Native
+**1. Separação de Concerns**
+- Entidades de domínio isoladas em `domain/entities`
+- Lógica de estado em stores Zustand separados
+- Componentes UI reutilizáveis e independentes
+
+**2. Reutilização de Código**
+- Todos os componentes são preparados para serem portados para React Native
 - Hooks e stores podem ser compartilhados entre Web e Mobile
-- Logica de negocio independente de framework
+- Lógica de negócio independente de framework
 
-**3. Persistencia**
+**3. Persistência**
 - Utiliza Zustand com middleware `persist`
-- Todas as configuracoes salvas no localStorage
-- Estado sincronizado entre sessoes e microfrontends
+- Todas as configurações salvas no localStorage
+- Estado sincronizado entre sessões
 
----
-
-## Tecnologias Utilizadas
+## 🛠️ Tecnologias Utilizadas
 
 ### Core
 - **React 19** - Biblioteca UI
-- **TypeScript** - Tipagem estatica
+- **TypeScript** - Tipagem estática
 - **Vite** - Build tool e dev server
-- **Module Federation** - `@originjs/vite-plugin-federation`
 
 ### UI/UX
 - **Material UI v7** - Componentes e design system
 - **Emotion** - CSS-in-JS
-- **React Router DOM** - Navegacao
+- **React Router DOM** - Navegação
 
 ### Estado e Dados
 - **Zustand** - Gerenciamento de estado global
-- **Zustand Persist** - Persistencia de estado
+- **Zustand Persist** - Persistência de estado
 
-### Formularios e Validacao
-- **React Hook Form** - Gerenciamento de formularios
-- **Zod** - Validacao de esquemas
+### Formulários e Validação
+- **React Hook Form** - Gerenciamento de formulários
+- **Zod** - Validação de esquemas
 
-### Infraestrutura
-- **Docker** - Containerizacao
-- **Docker Compose** - Orquestracao de containers
-- **Nginx** - Servidor web e proxy reverso
-
-### Utilitarios
-- **date-fns** - Manipulacao de datas
+### Utilitários
+- **date-fns** - Manipulação de datas
 - **clsx** - Utility para className
 - **Axios** - HTTP client
 
----
+## 🚀 Como Executar
 
-## Como Executar
-
-### Pre-requisitos
-- Node.js 18+
+### Pré-requisitos
+- Node.js 18+ 
 - npm ou yarn
-- Docker e Docker Compose (para modo Docker)
 
-### Opcao 1: Docker (Recomendado)
+### Instalação
 
 ```bash
-# Clone o repositorio
+# Clone o repositório
 git clone [URL_DO_REPOSITORIO]
+
+# Entre na pasta do projeto
 cd hackathon-web
 
-# Iniciar stack completa
-npm run docker:local:up
-
-# Acessar: http://localhost:3000
-
-# Parar
-npm run docker:local:down
-```
-
-### Opcao 2: Desenvolvimento Local
-
-```bash
-# Instale as dependencias
+# Instale as dependências
 npm install
 
-# Execute todos os microfrontends
+# Execute o projeto
 npm run dev
-
-# Ou execute individualmente:
-npm run dev:shell      # Shell (porta 5000)
-npm run dev:dashboard  # Dashboard (porta 5001)
-npm run dev:tasks      # Tasks (porta 5002)
-npm run dev:profile    # Profile (porta 5003)
 ```
 
-### Scripts Disponiveis
+O projeto estará disponível em `http://localhost:5173`
+
+### Scripts Disponíveis
 
 ```bash
-# Microfrontend (Docker)
-npm run docker:local:up      # Inicia stack completa
-npm run docker:local:down    # Para containers
-
-# Microfrontend (Local)
-npm run dev                  # Inicia todos os MFs
-npm run mf:build             # Build dos remotes
-npm run mf:start             # Build + start
-
-# Individual
-npm run dev:shell            # Apenas shell
-npm run dev:dashboard        # Apenas dashboard
-npm run dev:tasks            # Apenas tasks
-npm run dev:profile          # Apenas profile
-
-# Build & Quality
-npm run build                # Build todos workspaces
-npm run lint                 # Executa linter
-
-# Legacy (aplicacao monolitica original)
-npm run dev:legacy           # Aplicacao sem microfrontends
+npm run dev      # Inicia servidor de desenvolvimento
+npm run build    # Build para produção
+npm run preview  # Preview do build de produção
+npm run lint     # Executa o linter
 ```
 
----
-
-## Acessibilidade Cognitiva
+## ♿ Acessibilidade Cognitiva
 
 ### Componentes Especializados
 
 **AccessibleContainer**
-- Aplica configuracoes de acessibilidade automaticamente
-- Ajusta fonte, espacamento e contraste
+- Aplica configurações de acessibilidade automaticamente
+- Ajusta fonte, espaçamento e contraste
 - Suporta modo foco com blur de fundo
 
 **FocusCard**
-- Cards expansiveis que se adaptam ao nivel de complexidade
+- Cards expansíveis que se adaptam ao nível de complexidade
 - Em modo simples, sempre expandido
-- Em modo detalhado, mostra todas as opcoes
+- Em modo detalhado, mostra todas as opções
 
 **AnimatedCard**
-- Animacoes controlaveis pelo usuario
-- Pode ser desativado nas configuracoes de acessibilidade
+- Animações controláveis pelo usuário
+- Pode ser desativado nas configurações de acessibilidade
 - Suporta fade, grow e slide
 
 **CognitiveAlerts**
-- Notificacoes inteligentes sobre tempo de trabalho
+- Notificações inteligentes sobre tempo de trabalho
 - Mensagens de incentivo personalizadas
-- Avisos de transicao suave
+- Avisos de transição suave
 
-### Niveis de Complexidade
+### Níveis de Complexidade
 
 **Simples**
 - Interface minimalista
-- Apenas informacoes essenciais
+- Apenas informações essenciais
 - Cards sempre expandidos
 
-**Moderado** (Padrao)
-- Equilibrio entre informacao e clareza
-- Opcoes principais visiveis
+**Moderado** (Padrão)
+- Equilíbrio entre informação e clareza
+- Opções principais visíveis
 - Detalhes sob demanda
 
 **Detalhado**
-- Todas as opcoes e informacoes disponiveis
-- Maximo controle e personalizacao
-- Para usuarios avancados
+- Todas as opções e informações disponíveis
+- Máximo controle e personalização
+- Para usuários avançados
 
----
+## 🔄 Preparação para Mobile (React Native)
 
-## Preparacao para Mobile (React Native)
-
-### Codigo Reutilizavel
+### Código Reutilizável
 
 **Entities (Domain)**
-- 100% reutilizaveis em React Native
-- Tipos TypeScript puros sem dependencias de framework
+- 100% reutilizáveis em React Native
+- Tipos TypeScript puros sem dependências de framework
 
 **Stores (Zustand)**
-- 100% compativeis com React Native
-- Mesma logica de estado em ambas plataformas
+- 100% compatíveis com React Native
+- Mesma lógica de estado em ambas plataformas
 
-**Logica de Negocio**
+**Lógica de Negócio**
 - Separada dos componentes UI
 - Pode ser importada diretamente no projeto mobile
 
 ### Componentes a Portar
 
-Os componentes UI precisarao ser reescritos com React Native, mas a estrutura e logica permanecem:
+Os componentes UI precisarão ser reescritos com React Native, mas a estrutura e lógica permanecem:
 - Substituir Material UI por React Native Paper ou NativeBase
-- Adaptar navegacao para React Navigation
+- Adaptar navegação para React Navigation
 - Manter mesmos stores e entidades
 
----
+## 📱 Próximos Passos
 
-## Proximos Passos
-
-- [ ] Implementar testes unitarios e E2E
+- [ ] Implementar testes unitários
+- [ ] Adicionar testes E2E com Cypress
 - [ ] CI/CD com GitHub Actions
-- [ ] Integracao VLibras completa
-- [ ] Versao React Native
-- [ ] Backend com autenticacao
+- [ ] PWA support
+- [ ] Backend com Node.js/Express
+- [ ] Versão React Native
+- [ ] Integração com APIs externas
+- [ ] Sistema de gamificação
 
-> Veja o [Roadmap completo](./docs/roadmap.md) para mais detalhes
-
----
-
-## Equipe
+## 👥 Equipe
 
 Projeto desenvolvido para o Hackathon FIAP 2026
 
-## Licenca
+## 📄 Licença
 
-Este projeto esta sob a licenca MIT.
+Este projeto está sob a licença MIT.
 
 ---
 
-**MindEase** - Tecnologia para Todos
+**MindEase** - Tecnologia para Todos 🧠💙

@@ -12,16 +12,17 @@ export default function PomodoroTimer() {
     if (!pomodoro.isActive || pomodoro.isPaused) return;
 
     const interval = setInterval(() => {
+      const currentTime = pomodoro.timeRemaining;
       pomodoro.tick();
       
-      // Se acabou o timer
-      if (pomodoro.timeRemaining === 0) {
+      // Se acabou o timer (verifica se era 1 antes de decrementar)
+      if (currentTime === 1) {
         // Adiciona tempo à tarefa se houver uma tarefa ativa
         if (pomodoro.taskId && pomodoro.currentPhase === 'focus') {
           addTimeToTask(pomodoro.taskId, 25); // 25 minutos padrão
         }
         
-        // Notificação sonora (opcional)
+        // Notificação sonora
         if ('Notification' in window && Notification.permission === 'granted') {
           new Notification('Pomodoro Concluído!', {
             body: pomodoro.currentPhase === 'focus' 
@@ -34,7 +35,7 @@ export default function PomodoroTimer() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [pomodoro.isActive, pomodoro.isPaused, pomodoro.timeRemaining]);
+  }, [pomodoro.isActive, pomodoro.isPaused]);
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
@@ -135,9 +136,6 @@ export default function PomodoroTimer() {
             </IconButton>
           )}
         </Box>
-        <Typography variant="body2" sx={{ mt: 2, opacity: 0.9 }}>
-          Sessões completadas: {pomodoro.sessionCount}
-        </Typography>
       </Box>
     </Paper>
   );

@@ -1,117 +1,73 @@
-# MindEase - Plataforma de Acessibilidade Cognitiva
+# React + TypeScript + Vite
 
-> Facilitando a vida academica e profissional de pessoas neurodivergentes atraves de tecnologia inclusiva
+This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
-## Sobre
+Currently, two official plugins are available:
 
-**MindEase** e uma plataforma desenvolvida para o Hackathon FIAP 2026 com foco em **acessibilidade cognitiva**, auxiliando pessoas com TDAH, TEA, Dislexia, Burnout e outras condicoes.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Quick Start
+## React Compiler
 
-### Docker (Recomendado)
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-```bash
-# Iniciar stack completa
-npm run docker:local:up
+## Expanding the ESLint configuration
 
-# Acessar: http://localhost:3000
+If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
 
-# Parar
-npm run docker:local:down
+```js
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+
+      // Remove tseslint.configs.recommended and replace with this
+      tseslint.configs.recommendedTypeChecked,
+      // Alternatively, use this for stricter rules
+      tseslint.configs.strictTypeChecked,
+      // Optionally, add this for stylistic rules
+      tseslint.configs.stylisticTypeChecked,
+
+      // Other configs...
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
 
-### Desenvolvimento Local
+You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
-```bash
-# Instalar dependencias
-npm install
+```js
+// eslint.config.js
+import reactX from 'eslint-plugin-react-x'
+import reactDom from 'eslint-plugin-react-dom'
 
-# Executar todos os microfrontends
-npm run dev
-
-# Acessar: http://localhost:5000 (shell)
+export default defineConfig([
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      // Other configs...
+      // Enable lint rules for React
+      reactX.configs['recommended-typescript'],
+      // Enable lint rules for React DOM
+      reactDom.configs.recommended,
+    ],
+    languageOptions: {
+      parserOptions: {
+        project: ['./tsconfig.node.json', './tsconfig.app.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+      // other options...
+    },
+  },
+])
 ```
-
-## Arquitetura
-
-Este projeto utiliza **Module Federation** com arquitetura de microfrontends:
-
-```
-                    +------------------+
-                    |      SHELL       |  <- Host (porta 3000)
-                    |  (React Router)  |
-                    +--------+---------+
-                             |
-        +--------------------+--------------------+
-        |                    |                    |
-+-------v-------+    +-------v-------+    +-------v-------+
-|   DASHBOARD   |    |     TASKS     |    |    PROFILE    |
-|  (Painel,     |    |   (Tarefas)   |    | (Perfil,      |
-|   Explore)    |    |               |    |  Config)      |
-+---------------+    +---------------+    +---------------+
-    porta 5001          porta 5002          porta 5003
-```
-
-### Estrutura do Monorepo
-
-```
-hackathon-web/
-├── apps/
-│   ├── shell/          # Host - Routing e layout
-│   ├── dashboard/      # Remote - Painel e Explore
-│   ├── tasks/          # Remote - Tarefas (Kanban)
-│   └── profile/        # Remote - Perfil e Config
-├── packages/
-│   └── shared/         # Codigo compartilhado (stores, components, domain)
-└── docker/             # Configuracao Docker e Nginx
-```
-
-## Comandos
-
-| Comando | Descricao |
-|---------|-----------|
-| `npm run docker:local:up` | Inicia stack Docker completa |
-| `npm run docker:local:down` | Para containers Docker |
-| `npm run dev` | Inicia todos os MFs localmente |
-| `npm run dev:shell` | Apenas shell (porta 5000) |
-| `npm run build` | Build de todos os workspaces |
-| `npm run lint` | Executa ESLint |
-
-## Stack Tecnologica
-
-- **React 19** + **TypeScript** + **Vite**
-- **Module Federation** - `@originjs/vite-plugin-federation`
-- **Material UI v7** - Design System
-- **Zustand** - Estado global com persistencia
-- **Docker** + **Nginx** - Containerizacao e proxy reverso
-
-## Funcionalidades
-
-- Painel Cognitivo Personalizavel
-- Organizador de Tarefas com Kanban
-- Timer Pomodoro adaptavel
-- Perfil com configuracoes persistentes
-- Niveis de complexidade ajustaveis
-- Modo foco e controles de acessibilidade
-
-## Documentacao
-
-- **[README_MINDEASE.md](./README_MINDEASE.md)** - Documentacao detalhada do projeto
-- **[docs/DOCKER.md](./docs/DOCKER.md)** - Guia de deployment Docker
-- **[docs/roadmap.md](./docs/roadmap.md)** - Roadmap e status de implementacao
-
-## Deploy
-
-### Producao (VPS)
-
-```bash
-# Deploy inicial
-PORT=80 ./scripts/docker-prod.sh deploy
-
-# Atualizacao
-./scripts/docker-prod.sh update
-```
-
----
-
-**MindEase** - Tecnologia para Todos

@@ -22,6 +22,7 @@ import {
   Add,
   ExpandMore,
   ExpandLess,
+  Edit,
 } from '@mui/icons-material';
 import { useState } from 'react';
 import type { Task } from '../domain/entities/Task';
@@ -32,9 +33,10 @@ import { useThemeStore } from '../store/themeStore';
 
 interface TaskCardProps {
   task: Task;
+  onEdit?: (task: Task) => void;
 }
 
-export default function TaskCard({ task }: TaskCardProps) {
+export default function TaskCard({ task, onEdit }: TaskCardProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [showSubtasks, setShowSubtasks] = useState(false);
   const [newSubtask, setNewSubtask] = useState('');
@@ -53,6 +55,13 @@ export default function TaskCard({ task }: TaskCardProps) {
 
   const handleDelete = () => {
     deleteTask(task.id);
+    handleMenuClose();
+  };
+
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit(task);
+    }
     handleMenuClose();
   };
 
@@ -81,9 +90,38 @@ export default function TaskCard({ task }: TaskCardProps) {
     }
   };
 
+  const getStatusLabel = () => {
+    switch (task.status) {
+      case 'todo':
+        return 'A Fazer';
+      case 'in-progress':
+        return 'Em Progresso';
+      case 'done':
+        return 'Concluído';
+      default:
+        return 'Status';
+    }
+  };
+
+  const getStatusColor = () => {
+    if (detailedMode) {
+      return mode === 'light' ? '#666666' : '#888888';
+    }
+    switch (task.status) {
+      case 'todo':
+        return '#ed6c02';
+      case 'in-progress':
+        return '#0288d1';
+      case 'done':
+        return '#2e7d32';
+      default:
+        return '#9e9e9e';
+    }
+  };
+
   const completedSubtasks = task.subtasks.filter(s => s.completed).length;
-  const progress = task.subtasks.length > 0 
-    ? (completedSubtasks / task.subtasks.length) * 100 
+  const progress = task.subtasks.length > 0
+    ? (completedSubtasks / task.subtasks.length) * 100
     : 0;
 
   return (
@@ -102,6 +140,15 @@ export default function TaskCard({ task }: TaskCardProps) {
                 label={task.priority === 'high' ? 'Alta' : task.priority === 'medium' ? 'Média' : 'Baixa'}
                 color={getPriorityColor()}
                 size="small"
+              />
+              <Chip
+                label={getStatusLabel()}
+                size="small"
+                sx={{
+                  bgcolor: getStatusColor(),
+                  color: 'white',
+                  fontWeight: 'bold',
+                }}
               />
               {task.estimatedTime && (
                 <Chip
@@ -137,17 +184,17 @@ export default function TaskCard({ task }: TaskCardProps) {
                 Progresso: {completedSubtasks}/{task.subtasks.length}
               </Typography>
             </Box>
-            <LinearProgress 
-              variant="determinate" 
-              value={progress} 
-              sx={{ 
+            <LinearProgress
+              variant="determinate"
+              value={progress}
+              sx={{
                 mb: 2,
                 ...(detailedMode && {
                   '& .MuiLinearProgress-bar': {
                     backgroundColor: mode === 'light' ? '#666666' : '#aaaaaa',
                   },
                 }),
-              }} 
+              }}
             />
           </>
         )}
@@ -205,6 +252,9 @@ export default function TaskCard({ task }: TaskCardProps) {
         </Collapse>
 
         <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
+          <MenuItem onClick={handleEdit}>
+            <Edit sx={{ mr: 1 }} /> Editar
+          </MenuItem>
           {task.status !== 'todo' && (
             <MenuItem onClick={() => handleStatusChange('todo')}>
               Mover para: A Fazer

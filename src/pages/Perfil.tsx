@@ -41,7 +41,7 @@ export default function Perfil() {
     email: profile?.email || '',
   });
 
-  const neurodivergenceOptions = ['TDAH', 'TEA (Autismo)', 'Dislexia', 'Ansiedade', 'Burnout', 'Outro'];
+  const neurodivergenceOptions = ['TDAH', 'TEA (Autismo)', 'Dislexia', 'Ansiedade', 'Burnout', 'Sobrecarga Sensorial', 'Outro'];
 
   const handleSave = () => {
     updateProfile(formData);

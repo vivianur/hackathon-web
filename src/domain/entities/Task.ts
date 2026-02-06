@@ -11,7 +11,8 @@ export interface Task {
   timeSpent: number; // em minutos
   subtasks: Subtask[];
   createdAt: Date;
-  dueDate?: Date;
+  startDate?: Date; // data prevista de início
+  dueDate?: Date; // data prevista de término
   tags: string[];
 }
 

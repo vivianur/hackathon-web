@@ -8,7 +8,7 @@ import Painel from './pages/Painel';
 import Tarefas from './pages/Tarefas';
 import Perfil from './pages/Perfil';
 import Config from './pages/Config';
-import Explore from './pages/Explore';
+import Plataforma from './pages/Plataforma';
 
 function App() {
   return (
@@ -23,7 +23,7 @@ function App() {
           <Route path="/tarefas" element={<Tarefas />} />
           <Route path="/perfil" element={<Perfil />} />
           <Route path="/config" element={<Config />} />
-          <Route path="/explore" element={<Explore />} />
+          <Route path="/plataforma" element={<Plataforma />} />
         </Routes>
       </Box>
     </Box>

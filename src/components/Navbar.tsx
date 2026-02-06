@@ -1,21 +1,23 @@
 import { AppBar, Toolbar, Typography, Button, IconButton, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Box, useTheme, useMediaQuery, Tooltip } from '@mui/material';
-import { Menu as MenuIcon, Home, Dashboard, Assignment, Person, Settings, Explore, Brightness4, Brightness7 } from '@mui/icons-material';
+import { Menu as MenuIcon, Home, Dashboard, Assignment, Person, Settings, Language, Brightness4, Brightness7, CalendarToday } from '@mui/icons-material';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useThemeStore } from '../store/themeStore';
 import { useAnimations } from '../hooks/useAnimations';
+import CalendarDialog from './CalendarDialog';
 
 const menuItems = [
   { title: 'Home', path: '/', icon: <Home /> },
-  { title: 'Painel', path: '/painel', icon: <Dashboard /> },
+  { title: 'Plataforma', path: '/plataforma', icon: <Language /> },
   { title: 'Tarefas', path: '/tarefas', icon: <Assignment /> },
+  { title: 'Painel', path: '/painel', icon: <Dashboard /> },
   { title: 'Perfil', path: '/perfil', icon: <Person /> },
   { title: 'Config.', path: '/config', icon: <Settings /> },
-  { title: 'Explore', path: '/explore', icon: <Explore /> },
 ];
 
 export default function Navbar() {
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
@@ -116,6 +118,7 @@ export default function Navbar() {
                   to={item.path}
                   startIcon={item.icon}
                   sx={{
+                    textTransform: 'none',
                     backgroundColor: location.pathname === item.path ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
                     transition: 'all 0.2s ease',
                     ...(animations.shouldAnimate && {
@@ -162,6 +165,47 @@ export default function Navbar() {
                   {item.title}
                 </Button>
               ))}
+              <Tooltip title="Calendário de Tarefas">
+                <IconButton
+                  onClick={() => setCalendarOpen(true)}
+                  color="inherit"
+                  sx={{
+                    ml: 1,
+                    transition: 'transform 0.25s ease',
+                    ...(animations.shouldAnimate && {
+                      '&:hover': {
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.action.hover}`,
+                      },
+                      '&:hover svg': {
+                        transform: 'rotate(12deg)',
+                      },
+                    }),
+                    ...(animations.level === 'detailed' && animations.shouldAnimate && {
+                      '&:hover': {
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}55`,
+                      },
+                      '&:hover svg': {
+                        transform: 'rotate(22deg) scale(1.08)',
+                        filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.38))',
+                      },
+                      '&:active svg': {
+                        animation: 'spinOnce 0.55s ease',
+                      },
+                      '@keyframes spinOnce': {
+                        '0%': { transform: 'rotate(0deg)' },
+                        '100%': { transform: 'rotate(360deg)' },
+                      },
+                      '&:focus-visible': {
+                        outline: 'none',
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}77, 0 0 0 4px rgba(255,255,255,0.3)`,
+                        borderRadius: '50%',
+                      },
+                    }),
+                  }}
+                >
+                  <CalendarToday />
+                </IconButton>
+              </Tooltip>
               <Tooltip title={mode === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}>
                 <IconButton
                   onClick={toggleTheme}
@@ -206,46 +250,88 @@ export default function Navbar() {
             </Box>
           )}
           {isMobile && (
-            <Tooltip title={mode === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}>
-              <IconButton
-                onClick={toggleTheme}
-                color="inherit"
-                sx={{
-                  transition: 'transform 0.25s ease',
-                  ...(animations.shouldAnimate && {
-                    '&:hover': {
-                      boxShadow: (theme) => `0 0 0 2px ${theme.palette.action.hover}`,
-                    },
-                    '&:hover svg': {
-                      transform: 'rotate(12deg)',
-                    },
-                  }),
-                  ...(animations.level === 'detailed' && animations.shouldAnimate && {
-                    '&:hover': {
-                      boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}55`,
-                    },
-                    '&:hover svg': {
-                      transform: 'rotate(22deg) scale(1.08)',
-                      filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.38))',
-                    },
-                    '&:active svg': {
-                      animation: 'spinOnce 0.55s ease',
-                    },
-                    '@keyframes spinOnce': {
-                      '0%': { transform: 'rotate(0deg)' },
-                      '100%': { transform: 'rotate(360deg)' },
-                    },
-                    '&:focus-visible': {
-                      outline: 'none',
-                      boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}77, 0 0 0 4px rgba(255,255,255,0.3)`,
-                      borderRadius: '50%',
-                    },
-                  }),
-                }}
-              >
-                {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
-              </IconButton>
-            </Tooltip>
+            <>
+              <Tooltip title="Calendário de Tarefas">
+                <IconButton
+                  onClick={() => setCalendarOpen(true)}
+                  color="inherit"
+                  sx={{
+                    transition: 'transform 0.25s ease',
+                    ...(animations.shouldAnimate && {
+                      '&:hover': {
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.action.hover}`,
+                      },
+                      '&:hover svg': {
+                        transform: 'rotate(12deg)',
+                      },
+                    }),
+                    ...(animations.level === 'detailed' && animations.shouldAnimate && {
+                      '&:hover': {
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}55`,
+                      },
+                      '&:hover svg': {
+                        transform: 'rotate(22deg) scale(1.08)',
+                        filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.38))',
+                      },
+                      '&:active svg': {
+                        animation: 'spinOnce 0.55s ease',
+                      },
+                      '@keyframes spinOnce': {
+                        '0%': { transform: 'rotate(0deg)' },
+                        '100%': { transform: 'rotate(360deg)' },
+                      },
+                      '&:focus-visible': {
+                        outline: 'none',
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}77, 0 0 0 4px rgba(255,255,255,0.3)`,
+                        borderRadius: '50%',
+                      },
+                    }),
+                  }}
+                >
+                  <CalendarToday />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title={mode === 'light' ? 'Ativar modo escuro' : 'Ativar modo claro'}>
+                <IconButton
+                  onClick={toggleTheme}
+                  color="inherit"
+                  sx={{
+                    transition: 'transform 0.25s ease',
+                    ...(animations.shouldAnimate && {
+                      '&:hover': {
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.action.hover}`,
+                      },
+                      '&:hover svg': {
+                        transform: 'rotate(12deg)',
+                      },
+                    }),
+                    ...(animations.level === 'detailed' && animations.shouldAnimate && {
+                      '&:hover': {
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}55`,
+                      },
+                      '&:hover svg': {
+                        transform: 'rotate(22deg) scale(1.08)',
+                        filter: 'drop-shadow(0 0 6px rgba(255,255,255,0.38))',
+                      },
+                      '&:active svg': {
+                        animation: 'spinOnce 0.55s ease',
+                      },
+                      '@keyframes spinOnce': {
+                        '0%': { transform: 'rotate(0deg)' },
+                        '100%': { transform: 'rotate(360deg)' },
+                      },
+                      '&:focus-visible': {
+                        outline: 'none',
+                        boxShadow: (theme) => `0 0 0 2px ${theme.palette.primary.main}77, 0 0 0 4px rgba(255,255,255,0.3)`,
+                        borderRadius: '50%',
+                      },
+                    }),
+                  }}
+                >
+                  {mode === 'light' ? <Brightness4 /> : <Brightness7 />}
+                </IconButton>
+              </Tooltip>
+            </>
           )}
         </Toolbar>
       </AppBar>
@@ -256,6 +342,7 @@ export default function Navbar() {
       >
         {drawer}
       </Drawer>
+      <CalendarDialog open={calendarOpen} onClose={() => setCalendarOpen(false)} />
     </>
   );
 }
