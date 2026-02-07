@@ -1,7 +1,5 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
 import type { AccessibilitySettings } from "../domain/entities/AccessibilitySettings";
-import { enableStoreSync } from "./syncStores";
+import { createSingletonStore } from "./createSingletonStore";
 
 interface AccessibilityStore extends AccessibilitySettings {
 	setComplexityLevel: (level: AccessibilitySettings["complexityLevel"]) => void;
@@ -28,29 +26,41 @@ const defaultSettings: AccessibilitySettings = {
 	vlibrasEnabled: false,
 };
 
-export const useAccessibilityStore = create<AccessibilityStore>()(
-	persist(
-		(set) => ({
-			...defaultSettings,
-			setComplexityLevel: (level) => set({ complexityLevel: level }),
-			toggleFocusMode: () => set((state) => ({ focusMode: !state.focusMode })),
-			toggleDetailedMode: () =>
-				set((state) => ({ detailedMode: !state.detailedMode })),
-			setContrastLevel: (level) => set({ contrastLevel: level }),
-			setFontSize: (size) => set({ fontSize: size }),
-			setSpacing: (spacing) => set({ spacing: spacing }),
-			toggleAnimations: () =>
-				set((state) => ({ animationsEnabled: !state.animationsEnabled })),
-			toggleCognitiveAlerts: () =>
-				set((state) => ({ cognitiveAlerts: !state.cognitiveAlerts })),
-			toggleVlibras: () =>
-				set((state) => ({ vlibrasEnabled: !state.vlibrasEnabled })),
-			resetToDefaults: () => set(defaultSettings),
-		}),
-		{
-			name: "accessibility-storage",
+export const useAccessibilityStore = createSingletonStore<AccessibilityStore>(
+	(set, get) => ({
+		...defaultSettings,
+		setComplexityLevel: (level) => {
+			set({ complexityLevel: level });
 		},
-	),
+		toggleFocusMode: () => {
+			set({ focusMode: !get().focusMode });
+		},
+		toggleDetailedMode: () => {
+			set({ detailedMode: !get().detailedMode });
+		},
+		setContrastLevel: (level) => {
+			set({ contrastLevel: level });
+		},
+		setFontSize: (size) => {
+			set({ fontSize: size });
+		},
+		setSpacing: (spacing) => {
+			set({ spacing: spacing });
+		},
+		toggleAnimations: () => {
+			set({ animationsEnabled: !get().animationsEnabled });
+		},
+		toggleCognitiveAlerts: () => {
+			set({ cognitiveAlerts: !get().cognitiveAlerts });
+		},
+		toggleVlibras: () => {
+			set({ vlibrasEnabled: !get().vlibrasEnabled });
+		},
+		resetToDefaults: () => {
+			set(defaultSettings);
+		},
+	}),
+	{
+		name: "accessibility-storage",
+	},
 );
-
-enableStoreSync(useAccessibilityStore, "accessibility-storage");

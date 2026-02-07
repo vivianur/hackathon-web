@@ -1,6 +1,4 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { enableStoreSync } from "./syncStores";
+import { createSingletonStore } from "./createSingletonStore";
 
 interface ThemeStore {
 	mode: "light" | "dark";
@@ -8,20 +6,18 @@ interface ThemeStore {
 	resetToDefault: () => void;
 }
 
-export const useThemeStore = create<ThemeStore>()(
-	persist(
-		(set) => ({
-			mode: "light",
-			toggleTheme: () =>
-				set((state) => ({
-					mode: state.mode === "light" ? "dark" : "light",
-				})),
-			resetToDefault: () => set({ mode: "light" }),
-		}),
-		{
-			name: "theme-storage",
+export const useThemeStore = createSingletonStore<ThemeStore>(
+	(set, get) => ({
+		mode: "light",
+		toggleTheme: () => {
+			const newMode = get().mode === "light" ? "dark" : "light";
+			set({ mode: newMode });
 		},
-	),
+		resetToDefault: () => {
+			set({ mode: "light" });
+		},
+	}),
+	{
+		name: "theme-storage",
+	},
 );
-
-enableStoreSync(useThemeStore, "theme-storage");

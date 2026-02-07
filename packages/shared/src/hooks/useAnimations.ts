@@ -1,5 +1,4 @@
 import { useAccessibilityStore } from "../stores/accessibilityStore";
-import { keyframes } from "@emotion/react";
 import type { Theme } from "@mui/material/styles";
 import type { SystemStyleObject } from "@mui/system";
 
@@ -16,26 +15,6 @@ interface AnimationConfig {
 	cardHover: SystemStyleObject<Theme>;
 	staggerDelay: (index: number) => SystemStyleObject<Theme>;
 }
-
-const fadeInKf = keyframes`
-	from { opacity: 0; }
-	to { opacity: 1; }
-`;
-
-const slideUpKf = keyframes`
-	from { opacity: 0; transform: translateY(20px); }
-	to { opacity: 1; transform: translateY(0); }
-`;
-
-const slideDownKf = keyframes`
-	from { opacity: 0; transform: translateY(-10px); }
-	to { opacity: 1; transform: translateY(0); }
-`;
-
-const fadeInStaggerKf = keyframes`
-	from { opacity: 0; transform: translateX(-20px); }
-	to { opacity: 1; transform: translateX(0); }
-`;
 
 export function useAnimations(): AnimationConfig {
 	const { focusMode, complexityLevel, animationsEnabled } =
@@ -55,19 +34,31 @@ export function useAnimations(): AnimationConfig {
 	// Base animations for moderate mode
 	const fadeIn: SystemStyleObject<Theme> = shouldAnimate
 		? {
-				animation: `${fadeInKf} 0.4s ease-in-out`,
+				animation: "fadeIn 0.4s ease-in-out",
+				"@keyframes fadeIn": {
+					from: { opacity: 0 },
+					to: { opacity: 1 },
+				},
 			}
 		: {};
 
 	const slideUp: SystemStyleObject<Theme> = shouldAnimate
 		? {
-				animation: `${slideUpKf} 0.5s ease-out`,
+				animation: "slideUp 0.5s ease-out",
+				"@keyframes slideUp": {
+					from: { opacity: 0, transform: "translateY(20px)" },
+					to: { opacity: 1, transform: "translateY(0)" },
+				},
 			}
 		: {};
 
 	const slideDown: SystemStyleObject<Theme> = shouldAnimate
 		? {
-				animation: `${slideDownKf} 0.3s ease-out`,
+				animation: "slideDown 0.3s ease-out",
+				"@keyframes slideDown": {
+					from: { opacity: 0, transform: "translateY(-10px)" },
+					to: { opacity: 1, transform: "translateY(0)" },
+				},
 			}
 		: {};
 
@@ -108,13 +99,17 @@ export function useAnimations(): AnimationConfig {
 	const staggerDelay = (index: number): SystemStyleObject<Theme> => {
 		if (level === "detailed") {
 			return {
-				animation: `${fadeInStaggerKf} 0.5s ease-out ${index * 0.1}s both`,
+				animation: `fadeInStagger 0.5s ease-out ${index * 0.1}s both`,
+				"@keyframes fadeInStagger": {
+					from: { opacity: 0, transform: "translateX(-20px)" },
+					to: { opacity: 1, transform: "translateX(0)" },
+				},
 			};
 		}
 		return level === "moderate" ? fadeIn : {};
 	};
 
-	return {
+	const result = {
 		level,
 		shouldAnimate,
 		fadeIn,
@@ -125,4 +120,6 @@ export function useAnimations(): AnimationConfig {
 		cardHover,
 		staggerDelay,
 	};
+
+	return result;
 }

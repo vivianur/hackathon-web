@@ -18,9 +18,9 @@ export function useSpacing(): SpacingConfig {
   const getMultiplier = (): number => {
     switch (spacing) {
       case 'compact':
-        return 0.75;
+        return 0.5;
       case 'spacious':
-        return 1.25;
+        return 2;
       case 'comfortable':
       default:
         return 1;
@@ -29,7 +29,7 @@ export function useSpacing(): SpacingConfig {
 
   const multiplier = getMultiplier();
 
-  return {
+  const result = {
     multiplier,
     // Grid spacing (MUI usa 8px como base)
     gridSpacing: Math.round(3 * multiplier),
@@ -42,4 +42,6 @@ export function useSpacing(): SpacingConfig {
     px: `${1.5 * multiplier}rem`,
     py: `${1 * multiplier}rem`,
   };
+
+  return result;
 }

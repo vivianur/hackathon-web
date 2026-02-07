@@ -6,13 +6,11 @@ import {
   FocusCard,
   ThemedAlert,
   useAccessibilityStore,
-  useThemeStore,
   useAnimations
 } from '@mindease/shared';
 
 export default function Painel() {
   const accessibility = useAccessibilityStore();
-  const { mode, toggleTheme } = useThemeStore();
   const animations = useAnimations();
 
   const complexityOptions = [
@@ -116,23 +114,6 @@ export default function Painel() {
                       <Typography>Modo Monocromático</Typography>
                       <Typography variant="caption" color="text.secondary">
                         Remove todas as cores da interface
-                      </Typography>
-                    </Box>
-                  }
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={mode === 'dark'}
-                      onChange={toggleTheme}
-                      color="primary"
-                    />
-                  }
-                  label={
-                    <Box>
-                      <Typography>Modo Escuro</Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        Reduz o brilho da tela
                       </Typography>
                     </Box>
                   }

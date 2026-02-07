@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" role="img" aria-label="Ilustração de segurança">
+  <defs>
+    <linearGradient id="gs" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#0ea5e9" />
+    </linearGradient>
+  </defs>
+  <rect width="900" height="600" rx="32" fill="url(#gs)" />
+  <path d="M450 150l140 50v110c0 94-62 180-140 210-78-30-140-116-140-210V200z" fill="rgba(255,255,255,0.2)" />
+  <circle cx="450" cy="280" r="46" fill="rgba(255,255,255,0.7)" />
+  <rect x="430" y="280" width="40" height="90" rx="10" fill="rgba(255,255,255,0.8)" />
+  <text x="50%" y="82%" text-anchor="middle" fill="#fff" font-family="'Segoe UI', Arial, sans-serif" font-size="60" font-weight="700">Segurança</text>
+</svg>

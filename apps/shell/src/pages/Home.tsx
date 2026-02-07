@@ -10,7 +10,6 @@ import {
 } from "@mui/icons-material";
 import Grid from "@mui/material/Grid";
 import { useNavigate } from "react-router-dom";
-import { keyframes } from "@emotion/react";
 import {
 	AccessibleContainer,
 	AnimatedCard,
@@ -19,17 +18,6 @@ import {
 	useAccessibilityStore,
 	useSpacing,
 } from "@mindease/shared";
-
-const pulseIconKf = keyframes`
-	0%, 100% { transform: scale(1); }
-	50% { transform: scale(1.08); }
-`;
-
-const gradientShiftKf = keyframes`
-	0% { transform: translateX(-10%) scale(1); }
-	50% { transform: translateX(10%) scale(1.05); }
-	100% { transform: translateX(-10%) scale(1); }
-`;
 
 export default function Home() {
 	const navigate = useNavigate();
@@ -181,7 +169,11 @@ export default function Home() {
 											color: feature.color,
 											mb: 2,
 											...(animations.level === "detailed" && {
-												animation: `${pulseIconKf} 1.8s ease-in-out infinite`,
+												animation: "pulseIcon 1.8s ease-in-out infinite",
+												"@keyframes pulseIcon": {
+													"0%, 100%": { transform: "scale(1)" },
+													"50%": { transform: "scale(1.08)" },
+												},
 											}),
 										}}
 									>
@@ -214,6 +206,11 @@ export default function Home() {
 						...(animations.level === "detailed" && {
 							position: "relative",
 							overflow: "hidden",
+							"@keyframes gradientShift": {
+								"0%": { transform: "translateX(-10%) scale(1)" },
+								"50%": { transform: "translateX(10%) scale(1.05)" },
+								"100%": { transform: "translateX(-10%) scale(1)" },
+							},
 							"&::after": {
 								content: '""',
 								position: "absolute",
@@ -224,7 +221,7 @@ export default function Home() {
 										: "linear-gradient(45deg, rgba(150, 150, 150, 0.25), rgba(170, 170, 170, 0.25))"
 									: "linear-gradient(45deg, rgba(255, 121, 198, 0.25), rgba(102, 126, 234, 0.25))",
 								mixBlendMode: "screen",
-								animation: `${gradientShiftKf} 6s ease-in-out infinite`,
+								animation: "gradientShift 6s ease-in-out infinite",
 								pointerEvents: "none",
 							},
 						}),
