@@ -6,11 +6,18 @@ import FocusCard from '../components/FocusCard';
 import { useAccessibilityStore } from '../store/accessibilityStore';
 import { useThemeStore } from '../store/themeStore';
 import { useAnimations } from '../hooks/useAnimations';
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import { useState } from 'react';
 
 export default function Painel() {
   const accessibility = useAccessibilityStore();
   const { mode, toggleTheme } = useThemeStore();
   const animations = useAnimations();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+  const [alertType, setAlertType] = useState<"success" | "info">("info");
+
 
   const complexityOptions = [
     { value: 'simple', label: 'Simples', description: 'Interface minimalista' },
@@ -30,6 +37,21 @@ export default function Painel() {
     { value: 'comfortable', label: 'Confortável' },
     { value: 'spacious', label: 'Espaçoso' },
   ];
+
+  const handleToggleCognitiveAlerts = () => {
+    accessibility.toggleCognitiveAlerts();
+
+    if (!accessibility.cognitiveAlerts) {
+      setAlertType("success");
+
+      setSnackbarMessage("Alertas cognitivos ativados");
+    } else {
+      setSnackbarMessage("Alertas cognitivos desativados");
+    }
+
+    setSnackbarOpen(true);
+  };
+
 
   return (
     <AccessibleContainer>
@@ -222,7 +244,7 @@ export default function Painel() {
                   control={
                     <Switch
                       checked={accessibility.cognitiveAlerts}
-                      onChange={accessibility.toggleCognitiveAlerts}
+                      onChange={handleToggleCognitiveAlerts}
                       color="primary"
                     />
                   }
@@ -242,6 +264,27 @@ export default function Painel() {
             </FocusCard>
           </Grid>
         </Grid>
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={() => setSnackbarOpen(false)}
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+        >
+          <Alert
+            onClose={() => setSnackbarOpen(false)}
+            severity={alertType}
+            variant="filled"
+            sx={{
+              bgcolor: "primary.light",
+              color: "primary.contrastText",
+              borderRadius: 2,
+              alignItems: "center",
+            }}
+          >
+            {snackbarMessage}
+          </Alert>
+        </Snackbar>
+
       </Container>
     </AccessibleContainer>
   );
