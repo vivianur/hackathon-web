@@ -8,9 +8,9 @@ export default defineConfig({
 		federation({
 			name: "shell",
 			remotes: {
-				dashboard: "http://localhost:3000/mf/dashboard/assets/remoteEntry.js",
-				tasks: "http://localhost:3000/mf/tasks/assets/remoteEntry.js",
-				profile: "http://localhost:3000/mf/profile/assets/remoteEntry.js",
+				dashboard: "http://localhost:5001/assets/remoteEntry.js",
+				tasks: "http://localhost:5002/assets/remoteEntry.js",
+				profile: "http://localhost:5003/assets/remoteEntry.js",
 			},
 			shared: [
 				"react",
@@ -27,10 +27,12 @@ export default defineConfig({
 	server: {
 		port: 5000,
 		strictPort: true,
+		cors: true
 	},
 	preview: {
 		port: 5000,
 		strictPort: true,
+		cors: true
 	},
 	build: {
 		target: "esnext",

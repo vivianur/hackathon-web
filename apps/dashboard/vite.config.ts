@@ -26,10 +26,12 @@ export default defineConfig({
 	server: {
 		port: 5001,
 		strictPort: true,
+		cors: true
 	},
 	preview: {
 		port: 5001,
 		strictPort: true,
+		cors: true
 	},
 	build: {
 		target: "esnext",

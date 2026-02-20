@@ -11,6 +11,7 @@
 		"./stores": "./src/stores/index.ts",
 		"./components": "./src/components/index.ts",
 		"./theme": "./src/theme/index.ts",
+		"./tests": "./src/tests/index.ts",
 		"./package.json": "./package.json"
 	},
 	"dependencies": {},
