@@ -1,11 +1,8 @@
-import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-
 import Perfil from '../Perfil';
 import { renderWithProviders } from '@mindease/shared/tests';
-
 import {
   createProfileStoreMock,
   createAnimationsMock,
@@ -72,19 +69,6 @@ async function ensureExpanded(title: RegExp, user: ReturnType<typeof userEvent.s
   await user.click(toggle);
 
   return scope;
-}
-
-async function changeMuiSelectByVisibleText(
-  scope: ReturnType<typeof within>,
-  currentValue: RegExp,
-  optionText: RegExp,
-  user: ReturnType<typeof userEvent.setup>,
-) {
-  const selectButton = scope.getByRole('button', { name: currentValue });
-  await user.click(selectButton);
-
-  const option = await screen.findByRole('option', { name: optionText });
-  await user.click(option);
 }
 
 async function changeMuiSelectByIndex(

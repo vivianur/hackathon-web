@@ -28,6 +28,43 @@ export const createProfileStoreMock = (override: any = {}) => ({
   ...override,
 });
 
+export const createAccessibilityPanelStoreMock = (override: any = {}) => ({
+  complexityLevel: 'simple',
+  setComplexityLevel: vi.fn(),
+
+  focusMode: false,
+  toggleFocusMode: vi.fn(),
+
+  detailedMode: false,
+  toggleDetailedMode: vi.fn(),
+
+  fontSize: 'medium',
+  setFontSize: vi.fn(),
+
+  spacing: 'comfortable',
+  setSpacing: vi.fn(),
+
+  contrastLevel: 'medium',
+  setContrastLevel: vi.fn(),
+
+  animationsEnabled: true,
+  toggleAnimations: vi.fn(),
+
+  cognitiveAlerts: false,
+  toggleCognitiveAlerts: vi.fn(),
+
+  vlibrasEnabled: false,
+  toggleVlibras: vi.fn(),
+
+  ...override,
+});
+
+export const createThemePanelStoreMock = (override: any = {}) => ({
+  mode: 'light' as 'light' | 'dark',
+  toggleTheme: vi.fn(),
+  ...override,
+});
+
 export const createAccessibilityStoreMock = (override = {}) => {
   const resetToDefaults = vi.fn()
   return {
