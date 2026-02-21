@@ -9,7 +9,9 @@ export default defineConfig({
 
     include: [
       './apps/profile/src/**/*.test.{ts,tsx}',
-      './apps/dashboard/src/**/*.test.{ts,tsx}'
+      './apps/dashboard/src/**/*.test.{ts,tsx}',
+      './apps/tasks/src/**/*.test.{ts,tsx}',
+      './apps/shell/src/**/*.test.{ts,tsx}',
     ],
     setupFiles: './packages/shared/src/tests/setup.ts',
   },

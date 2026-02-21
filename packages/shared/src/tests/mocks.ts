@@ -95,3 +95,6 @@ export const createAccessibilitySelectorMock = (state = { detailedMode: false })
 
 export const createThemeSelectorMock = (state = { mode: 'light' as 'light' | 'dark' }) =>
   (selector?: (s: any) => any) => (typeof selector === 'function' ? selector(state) : state);
+
+export const createTaskStoreSelectorMock = (state: any = { tasks: [] }) =>
+  (selector?: (s: any) => any) => (typeof selector === 'function' ? selector(state) : state);
