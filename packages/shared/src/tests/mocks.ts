@@ -1,5 +1,23 @@
 import { vi } from 'vitest'
 
+export const createSelectorMock =
+  <T extends Record<string, any>>(state: T) =>
+  (selector?: (s: T) => any) =>
+    typeof selector === 'function' ? selector(state) : state;
+
+export const createHomeAccessibilityState = (override: any = {}) => ({
+  detailedMode: false,
+  complexityLevel: 'simple',
+  themeMode: 'light',
+  ...override,
+});
+
+export const createHomeAnimationsState = (override: any = {}) => ({
+  level: 'simple',
+  getAnimation: () => ({}),
+  ...override,
+});
+
 export const createProfileStoreMock = (override: any = {}) => ({
   profile: {
     id: 'p1',

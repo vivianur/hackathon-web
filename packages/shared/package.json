@@ -12,7 +12,8 @@
 		"./components": "./src/components/index.ts",
 		"./theme": "./src/theme/index.ts",
 		"./tests": "./src/tests/index.ts",
-		"./package.json": "./package.json"
+		"./package.json": "./package.json",
+		"./tests/setup": "./src/tests/setup.ts"
 	},
 	"dependencies": {},
 	"devDependencies": {

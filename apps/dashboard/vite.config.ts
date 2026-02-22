@@ -38,4 +38,9 @@ export default defineConfig({
 		minify: false,
 		cssCodeSplit: false,
 	},
+	test: {
+    	globals: true,
+    	environment: 'jsdom',
+    	setupFiles: '@mindease/shared/tests/setup',
+  	},
 });
