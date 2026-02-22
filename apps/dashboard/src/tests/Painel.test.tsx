@@ -88,11 +88,6 @@ async function chooseOption(user: ReturnType<typeof userEvent.setup>, option: Re
     await user.click(optAsync);
 }
 
-async function chooseOptionExact(user: ReturnType<typeof userEvent.setup>, option: RegExp) {
-    const opt = await screen.findByRole('option', { name: option, exact: false });
-    await user.click(opt);
-}
-
 async function chooseOptionByIndex(user: ReturnType<typeof userEvent.setup>, index: number) {
     const options = await screen.findAllByRole('option');
     await user.click(options[index]);

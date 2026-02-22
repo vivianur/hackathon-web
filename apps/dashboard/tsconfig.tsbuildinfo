@@ -1,1 +1,1 @@
-{"root":["./src/Painel.tsx","./src/Plataforma.tsx","./src/main.tsx","./src/tests/Painel.test.tsx","./src/tests/Plataforma.test.tsx"],"errors":true,"version":"5.9.3"}
+{"root":["./src/Painel.tsx","./src/Plataforma.tsx","./src/main.tsx","./src/vitest.d.ts","./src/tests/Painel.test.tsx","./src/tests/Plataforma.test.tsx"],"version":"5.9.3"}

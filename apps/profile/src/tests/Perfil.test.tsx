@@ -109,8 +109,8 @@ describe('Perfil Page', () => {
       neurodivergence: [],
     });
 
-    if (globalThis.crypto?.randomUUID) {
-      vi.spyOn(globalThis.crypto, 'randomUUID').mockReturnValue('uuid-fixed-123');
+    if (typeof globalThis.crypto?.randomUUID === 'function') {
+      vi.spyOn(globalThis.crypto, 'randomUUID').mockReturnValue('123e4567-e89b-12d3-a456-426614174000');
     }
   });
 
@@ -124,7 +124,7 @@ describe('Perfil Page', () => {
     const arg = profileStoreMock.setProfile.mock.calls[0][0];
 
     expect(arg).toMatchObject({
-      id: 'uuid-fixed-123',
+      id: '123e4567-e89b-12d3-a456-426614174000',
       name: 'Usuário',
       email: 'usuario@fiap.com.br',
       neurodivergence: [],
@@ -207,10 +207,10 @@ describe('Perfil Page', () => {
     const emailInput = screen.getByLabelText(/Email/i) as HTMLInputElement;
 
     await user.clear(nameInput);
-    await user.type(nameInput, 'Mudado');
+    await user.type(nameInput, 'Junior Editado');
 
     await user.clear(emailInput);
-    await user.type(emailInput, 'mudado@fiap.com.br');
+    await user.type(emailInput, 'junior.editado@fiap.com.br');
 
     await user.click(screen.getByRole('button', { name: /Cancelar/i }));
 

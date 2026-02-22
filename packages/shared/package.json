@@ -13,7 +13,7 @@
 		"./theme": "./src/theme/index.ts",
 		"./tests": "./src/tests/index.ts",
 		"./package.json": "./package.json",
-		"./tests/setup": "./src/tests/setup.ts"
+		"./vite.setup.ts": "./vite.setup.ts"
 	},
 	"dependencies": {},
 	"devDependencies": {

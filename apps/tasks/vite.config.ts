@@ -38,6 +38,6 @@ export default defineConfig({
 	test: {
     	globals: true,
     	environment: 'jsdom',
-    	setupFiles: '@mindease/shared/tests/setup',
+    	setupFiles: '@mindease/shared/vite.setup.ts',
   	},
 });

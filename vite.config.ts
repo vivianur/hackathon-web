@@ -13,6 +13,6 @@ export default defineConfig({
       './apps/tasks/src/**/*.test.{ts,tsx}',
       './apps/shell/src/**/*.test.{ts,tsx}',
     ],
-    setupFiles: './packages/shared/src/tests/setup.ts',
+    setupFiles: ['./packages/shared/vite.setup.ts'],
   },
 })
