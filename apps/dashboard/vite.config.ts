@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from 'vitest/config';
 import react from "@vitejs/plugin-react";
 import federation from "@originjs/vite-plugin-federation";
 
@@ -26,14 +26,21 @@ export default defineConfig({
 	server: {
 		port: 5001,
 		strictPort: true,
+		cors: true
 	},
 	preview: {
 		port: 5001,
 		strictPort: true,
+		cors: true
 	},
 	build: {
 		target: "esnext",
 		minify: false,
 		cssCodeSplit: false,
 	},
+	test: {
+    	globals: true,
+    	environment: 'jsdom',
+    	setupFiles: '@mindease/shared/tests/setup',
+  	},
 });

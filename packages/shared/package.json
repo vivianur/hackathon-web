@@ -11,7 +11,9 @@
 		"./stores": "./src/stores/index.ts",
 		"./components": "./src/components/index.ts",
 		"./theme": "./src/theme/index.ts",
-		"./package.json": "./package.json"
+		"./tests": "./src/tests/index.ts",
+		"./package.json": "./package.json",
+		"./vite.setup.ts": "./vite.setup.ts"
 	},
 	"dependencies": {},
 	"devDependencies": {

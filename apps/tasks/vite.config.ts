@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig } from 'vitest/config';
 import react from "@vitejs/plugin-react";
 import federation from "@originjs/vite-plugin-federation";
 
@@ -35,4 +35,9 @@ export default defineConfig({
 		minify: false,
 		cssCodeSplit: false,
 	},
+	test: {
+    	globals: true,
+    	environment: 'jsdom',
+    	setupFiles: '@mindease/shared/vite.setup.ts',
+  	},
 });

@@ -12,3 +12,6 @@ export * from './hooks';
 
 // Theme
 export * from './theme';
+
+// Test
+export * from './tests';
