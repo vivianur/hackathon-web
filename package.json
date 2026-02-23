@@ -33,7 +33,8 @@
 		"docker:prod:deploy": "./scripts/docker-prod.sh deploy",
 		"docker:prod:update": "./scripts/docker-prod.sh update",
 		"test": "vitest",
-		"test:run": "vitest run"
+		"test:run": "vitest run",
+		"prepare": "husky"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
@@ -68,6 +69,7 @@
 		"eslint-plugin-react-hooks": "^7.0.1",
 		"eslint-plugin-react-refresh": "^0.4.24",
 		"globals": "^16.5.0",
+		"husky": "^9.1.7",
 		"jsdom": "^28.1.0",
 		"json-server": "^1.0.0-beta.3",
 		"typescript": "~5.9.3",
