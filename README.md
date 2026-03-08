@@ -1,73 +1,269 @@
-# React + TypeScript + Vite
+# MindEase
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Plataforma de **acessibilidade cognitiva** desenvolvida para auxiliar pessoas neurodivergentes a organizar tarefas, manter foco e reduzir sobrecarga mental em ambientes digitais.
 
-Currently, two official plugins are available:
+O projeto foi desenvolvido para o **Hackathon FIAP** com uma arquitetura moderna baseada em **Microfrontends**, sendo a última fase de Tech Challenge para o curso de Pós-Graduação em Engenharia Frontend.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+# Principais Funcionalidades
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Painel cognitivo personalizável  
+- Organizador de tarefas com visualização Kanban  
+- Timer Pomodoro  
+- Ajustes de acessibilidade (contraste, espaçamento, fonte)  
+- Modo claro e escuro  
+- Persistência de preferências do usuário  
+- Dashboard de produtividade  
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Arquitetura
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+A aplicação utiliza **Microfrontend Architecture** com **Module Federation**.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Cada domínio da aplicação é desenvolvido e buildado de forma independente, permitindo **escala, isolamento e deploy modular**.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Aplicações
+
+```
+apps/
+ ├─ shell        # Container principal da aplicação
+ ├─ dashboard    # Painel de produtividade
+ ├─ tasks        # Gestão de tarefas
+ └─ profile      # Perfil e configurações do usuário
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Pacotes compartilhados
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+packages/
+ └─ shared       # Utilitários, mocks e configurações compartilhadas
+```
+
+O **Shell** é responsável por:
+
+- carregar os microfrontends  
+- gerenciar rotas globais  
+- fornecer layout e contexto da aplicação  
+
+---
+
+# Estrutura do Projeto
+
+```
+mindease-web
+│
+├─ apps
+│   ├─ shell
+│   ├─ dashboard
+│   ├─ tasks
+│   └─ profile
+│
+├─ packages
+│   └─ shared
+│
+├─ scripts
+│   └─ docker scripts
+│
+├─ vite.config.ts
+└─ package.json
+```
+
+O projeto utiliza **npm workspaces** para gerenciar múltiplos pacotes dentro do monorepo.
+
+---
+
+# Tecnologias
+
+## Core
+
+- React 19  
+- TypeScript  
+- Vite  
+
+## Microfrontend
+
+- Module Federation (vite-plugin-federation)
+
+## UI
+
+- Material UI  
+- Emotion  
+
+## Estado e Dados
+
+- Zustand  
+- Axios  
+
+## Formulários
+
+- React Hook Form  
+- Zod  
+
+# Testes
+
+O projeto utiliza **Vitest + Testing Library** para testes unitários e de componentes.
+
+Configuração principal:
+
+- Ambiente **jsdom**
+- Testes organizados por microfrontend
+
+```
+apps/*/src/**/*.test.tsx
+```
+
+Executar testes:
+
+```bash
+npm run test
+```
+
+Executar em modo CI:
+
+```bash
+npm run test:run
+```
+
+---
+
+# Git Hooks
+
+O projeto utiliza **Husky** para garantir qualidade de código antes de commits.
+
+Exemplo de automações:
+
+- execução de testes  
+- validação de lint  
+
+---
+
+# Docker
+
+A aplicação possui scripts para execução via Docker.
+
+### Ambiente local
+
+```bash
+npm run docker:local
+```
+
+Subir containers:
+
+```bash
+npm run docker:local:up
+```
+
+Parar containers:
+
+```bash
+npm run docker:local:down
+```
+
+### Deploy
+
+```bash
+npm run docker:prod:deploy
+```
+
+---
+
+# Executando o Projeto
+
+## Pré-requisitos
+
+- Node.js 18+
+- npm 9+
+- Docker (opcional)
+
+---
+
+## Instalação
+
+```bash
+git clone <repo>
+cd mindease-web
+npm install
+```
+
+---
+
+## Rodando a aplicação
+
+```bash
+npm run dev
+```
+
+Isso irá:
+
+1. buildar os microfrontends  
+2. iniciar os remotes  
+3. iniciar o shell  
+
+---
+
+## Rodar apps individualmente
+
+Shell:
+
+```bash
+npm run dev:shell
+```
+
+Dashboard:
+
+```bash
+npm run dev:dashboard
+```
+
+Tasks:
+
+```bash
+npm run dev:tasks
+```
+
+Profile:
+
+```bash
+npm run dev:profile
+```
+
+---
+
+# Build
+
+Build de todos os microfrontends:
+
+```bash
+npm run build
+```
+
+Build individual:
+
+```bash
+npm run build:dashboard
+npm run build:tasks
+npm run build:profile
+```
+
+---
+
+# Monorepo
+
+O projeto utiliza **npm workspaces** para organizar múltiplos pacotes:
+
+```
+workspaces:
+  - apps/*
+  - packages/*
+```
+
+Isso permite:
+
+- compartilhamento de dependências  
+- builds independentes  
+- melhor organização do código  
+
+
+
