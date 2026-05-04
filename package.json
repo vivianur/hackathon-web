@@ -34,7 +34,6 @@
 		"docker:prod:update": "./scripts/docker-prod.sh update",
 		"test": "vitest",
 		"test:run": "vitest run",
-		"prepare": "husky"
 	},
 	"dependencies": {
 		"@emotion/react": "^11.14.0",
